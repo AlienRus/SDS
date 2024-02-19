@@ -93,7 +93,7 @@ public class PositionEntity {
                 ", count='" + count + '\'' +
                 ", unitName='" + unitName + '\'' +
                 ", recipient='" + recipient + '\'' +
-                ", type of business='" + supplier.toString() + '\'' +
+                ", winner='" + supplier.toString() + '\'' +
                 '}';
     }
 }
