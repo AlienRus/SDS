@@ -81,7 +81,7 @@ public class RequestEntity {
                 ", priceForOne='" + priceForOne + '\'' +
                 ", count='" + count + '\'' +
                 ", deliveryTime='" + deliveryTime + '\'' +
-                ", type of business='" + supplier.toString() + '\'' +
+                ", supplier='" + supplier.toString() + '\'' +
                 '}';
     }
 }
