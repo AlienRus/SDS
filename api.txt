@@ -1,0 +1,615 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DYSTOPIANGOD/Lot-sys/1.0.0
+info:
+  version: "1.0.0"
+  title: Lot-sys
+  description: The API for the Lot-sys project
+paths:
+  /lots:
+    post:
+      summary: Добавление лота
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotData'
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+  /lots/{lotId}:
+    get:
+      summary: Получение информации о лоте
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LotData'
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+    put:
+      summary: Изменение данных о лоте
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotData'
+      responses:
+        '200':
+          description: Успешное изменение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+    delete:
+      summary: Удаление лота
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное удаление данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+  /lots/{lotId}/positions:
+    post:
+      summary: Добавление позиции в лот
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionRequest'
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+  /lots/{userId}/{status}:
+    get:
+      summary: Получение информации о лотах юзера по указанному статусу
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+        - name: status
+          in: path
+          required: true
+          description: Статус лота
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LotStatusData'
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+        
+  /lots/{groupId}:
+    get:
+      summary: Получение информации о лотах по группе 
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Идентификатор группы
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LotGroupData'
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lots
+  
+  /positions/{lotId}:
+    get:
+      summary: Получение информации о позициях по лоту
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionData'
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по позиции не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Positions
+        
+    put:
+      summary: Изменение данных о позиции по лоту
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionRequest'
+      responses:
+        '200':
+          description: Успешное изменение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по позиции не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Positions
+  
+  /positions/{positionId}:
+    delete:
+      summary: Удаление данных о позиции по лоту
+      parameters:
+        - name: positionId
+          in: path
+          required: true
+          description: Идентификатор позиции
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное удаление данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по позиции не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Positions
+  
+  /lists/{lotId}:
+    get:
+      summary: Получение конкурентного листа по номеру лота
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          description: Идентификатор лота
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConcurentListData'
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по лоту не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Lists
+        
+  /requests/{requestId}:
+    put:
+      summary: Изменение заявки по номеру
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          description: Идентификатор заявки
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestData'
+      responses:
+        '200':
+          description: Успешный запрос
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по заявке не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Requests
+  
+    
+  /requests/{positionId}:
+    post:
+      summary: Добавление заявки по номеру позиции
+      parameters:
+        - name: positionId
+          in: path
+          required: true
+          description: Идентификатор позиции
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestData'
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по позиции не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Requests
+        
+    delete:
+      summary: Удаление заявки по номеру
+      parameters: 
+        - name: positionId
+          in: path
+          required: true
+          description: Идентификатор позиции
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное удаление данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по позиции не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Requests
+        
+         
+components:
+  schemas:
+    LotData:
+      type: object
+      properties:
+        name:
+          type: string
+        openDate:
+          type: string
+        closeDate:
+          type: string
+        status:
+          type: string
+        canOwnWay:
+          type: boolean
+        lotCreator:
+          type: string
+        groupEts:
+          type: string
+        rules:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Rule'
+        lotFiles:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/LotFile'
+    
+    Rule:
+      type: object
+      properties:
+        shippingMethod:
+          type: string
+        paymentMethod:
+          type: string
+        comment:
+          type: string
+          
+    LotFile:
+      type: object
+      properties:
+        lotId:
+          type: integer
+        path:
+          type: string
+        
+    PositionData:
+      type: object
+      properties:
+        id:
+          type: integer
+        itemName:
+          type: integer
+        priceForOne:
+          type: integer
+        count: 
+          type: integer
+        unitName:
+          type: integer
+        winner:
+          type: integer
+    
+    PositionRequest:
+      type: object
+      properties:
+        itemName:
+          type: string
+        priceForOne:
+          type: integer
+        count:
+          type: integer
+        unitName:
+          type: string
+    
+    ConcurentListData:
+      type: object
+      properties:
+        requests:
+          type: array
+          items: 
+            $ref: '#/components/schemas/RequestArrayElement'
+        files:
+          type: array
+          items: 
+            $ref: '#/components/schemas/FileArrayElement'
+        rules:
+          type: array
+          items: 
+            $ref: '#/components/schemas/RuleArrayElement'
+          
+    RequestArrayElement:
+      type: object
+      properties:
+        id:
+          type: integer
+        priceForOne:
+          type: integer
+        count:
+          type: integer
+        itemName:
+          type: string
+        deliveryTime:
+          type: integer
+        supplier:
+          type: string
+          
+    FileArrayElement:
+      type: object
+      properties:
+        path:
+          type: string
+        supplierId:
+          type: integer
+          
+    RuleArrayElement:
+      type: object
+      properties:
+        comment:
+          type: string
+        payment:
+          type: object
+          properties:
+            method:
+              type: string
+            value:
+              type: integer
+        shippingMethod:
+          type: string
+          
+    RequestData:
+      type: object
+      properties:
+        priceForOne:
+          type: integer
+        count:
+          type: integer
+        itemName:
+          type: string
+        deliveryTime:
+          type: integer
+        requestFiles:
+          type: object
+          properties:
+            path:
+              type: string
+            supplierId:
+              type: integer
+        requestRules:
+          type: object
+          properties:
+            comment:
+              type: string
+            payment:
+              type: object
+              properties:
+                method:
+                  type: string
+                value:
+                  type: integer
+            shippingMethod:
+              type: string
+              
+    LotStatusData:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        openDate:
+          type: string
+        closeDate:
+          type: string
+        groupEts:
+          type: string
+        totalRequests:
+          type: integer
+          
+    LotGroupData:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        openDate:
+          type: string
+        closeDate:
+          type: string
+    
+    
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    
+tags:
+  - name: Lots
+  - name: Positions
+  - name: Lists
+  - name: Requests
+  - name: Suppliers
+  - name: Notifications
+  - name: Groups
+  - name: Users
+  - name: Confirmation
+  - name: Resets
+  - name: Auth
