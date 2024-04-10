@@ -404,7 +404,335 @@ paths:
       tags:
         - Requests
         
-         
+  /suppliers/{supplierId}:
+    get:
+      summary: Получение данных о поставщике
+      parameters: 
+        - name: supplierId
+          in: path
+          required: true
+          description: Идентификатор поставщика
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное получение данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierData'
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по поставщику не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Suppliers
+        
+  /users:
+    get:
+      summary: Получение данных о всех пользователях
+      responses:
+        '200':
+          description: Успешное получение данных
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/SupplierFullData'
+                - $ref: '#/components/schemas/SupplySpecialistFullData'
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по поставщику не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+  
+  /users/{userId}:
+    put:
+      summary: Изменение данных о пользователе
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json: 
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SupplierEditRequest'
+                - $ref: '#/components/schemas/SupplySpecialistEditRequest'
+      responses:
+        '200':
+          description: Успешное изменение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по пользователю не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+  
+    delete:
+      summary: Удаление данных о пользователе
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное удаление данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по пользователю не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+        
+  /auth/login:
+    post:
+      summary: Авторизация
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешный вход
+        '401':
+          description: Неверные учетные данные
+      tags:
+        - Auth
+
+  /auth/reg:
+    post:
+      summary: Регистрация
+      requestBody:
+        content:
+          application/json: 
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SupplierRegRequest'
+                - $ref: '#/components/schemas/SupplySpecialistRegRequest'
+      responses:
+        '200':
+          description: Успешная регистрация
+        '401':
+          description: Неверные учетные данные
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+        
+  /confirmations:
+    post:
+      summary: Добавление записи о подтверждении регистрации
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по подтверждению не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Confirmation
+  
+  /resets:
+    post:
+      summary: Создание заявки на сброс данных пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userEmail:
+                  type: string
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по подтверждению не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Resets
+  
+  /notifications/{supplierId}:
+    post:
+      summary: Отправить список групп (категорий) по которым будут приходить уведомления
+      parameters: 
+        - name: supplierId
+          in: path
+          required: true
+          description: Номер поставщика
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetNotificationsRequest'
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по подтверждению не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Notifications
+  
+  /groups:
+    get:
+      summary: Получить список групп (категорий)
+      responses:
+        '200':
+          description: Успешное получение данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ETSGroupData'
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по поставщику не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Groups
+  
+    post:
+      summary: Добавить группу (категорию)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ETSGroupData'
+      responses:
+        '200':
+          description: Успешное занесение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по подтверждению не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Groups
+        
+    put:
+      summary: Изменить группу (категорию)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ETSGroupData'
+      responses:
+        '200':
+          description: Успешное изменение данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по пользователю не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Groups
+  
+  /groups/{groupId}:
+    delete:
+      summary: Удалить группу (категорию) по номеру
+      parameters: 
+        - name: groupId
+          in: path
+          required: true
+          description: Номер группы
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешное удаление данных
+        '400':
+          description: Некорректные данные
+        '401':
+          description: Требуется аутентификация
+        '404': 
+          description: Данные по пользователю не найдены
+        '500':
+          description: Внутренняя ошибка сервера
+      security:
+        - bearerAuth: []
+      tags:
+        - Groups
+        
 components:
   schemas:
     LotData:
@@ -595,7 +923,228 @@ components:
         closeDate:
           type: string
     
+    SupplierData:
+      type: object
+      properties:
+        email:
+          type: string
+        typeOfBusiness:
+          type: string
+        company:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        regionOrAddress:
+          type: string
+        site:
+          type: string
+        inn:
+          type: integer
+        kpp:
+          type: integer
     
+    SupplierEditRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        typeOfBusiness:
+          type: string
+        company:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        regionOrAddress:
+          type: string
+        site:
+          type: string
+        inn:
+          type: integer
+        kpp:
+          type: integer
+        groupEtsId:
+          type: array
+          items:
+              type: integer
+              
+    SupplySpecialistEditRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        groupEtsId:
+          type: array
+          items:
+              type: integer
+    
+    LoginRequest:
+      type: object
+      properties: 
+        email:
+          type: string
+        password:
+          type: string
+
+    SupplierRegRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        typeOfBusiness:
+          type: string
+        company:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        regionOrAddress:
+          type: string
+        site:
+          type: string
+        inn:
+          type: integer
+        kpp:
+          type: integer
+        groupEtsId:
+          type: array
+          items:
+            type: integer
+
+    SupplySpecialistRegRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        groupEtsId:
+          type: array
+          items:
+            type: integer
+            
+    SupplierFullData:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        password:
+          type: string
+        typeOfBusiness:
+          type: string
+        company:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        regionOrAddress:
+          type: string
+        site:
+          type: string
+        inn:
+          type: integer
+        kpp:
+          type: integer
+        groupEtsId:
+          type: array
+          items:
+            type: integer
+        groupEts:
+          type: array
+          items:
+            type: string
+        isApproved:
+          type: boolean
+    
+    SupplySpecialistFullData:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        groupEtsId:
+          type: array
+          items:
+            type: integer
+            
+    SetNotificationsRequest:
+      type: object
+      properties:
+        array:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationsRequestArrayElements'
+    
+    NotificationsRequestArrayElements:
+      type: object
+      properties:
+        groupId:
+          type: integer
+        email:
+          type: boolean
+        system:
+          type: boolean
+          
+    ETSGroupData:
+      type: object
+      properties:
+        name:
+          type: string
+        managerPost:
+          type: string
+        managerFirstName:
+          type: string
+        managerLastName:
+          type: string
+        managerMiddleName:
+          type: string
+        signer:
+          type: array
+          items:
+            $ref: '#/components/schemas/ETSGroupDataSigner'
+    
+    ETSGroupDataSigner:
+      type: object
+      properties:
+        post:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+
   securitySchemes:
     bearerAuth:
       type: http
