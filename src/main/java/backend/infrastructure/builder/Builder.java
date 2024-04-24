@@ -9,24 +9,24 @@ import jakarta.inject.Inject;
 
 public class Builder {
 
-    @Inject
-    @Default
-    private IUsersRepository usersRepository;
+    // @Inject
+    // @Default
+    // private IUsersRepository usersRepository;
 
-    @Inject
-    @Default
-    private IAuthorizer authorizer;
+    // @Inject
+    // @Default
+    // private IAuthorizer authorizer;
 
     // @Inject
     // @Default
     // private IRegistrator registrator;
 
-    @Produces
-    @Built
-    public IAuthorizer buildAuthorizer() {
-        authorizer.injectUsersRepository(usersRepository);
-        return authorizer;
-    }
+    // @Produces
+    // @Built
+    // public IAuthorizer buildAuthorizer() {
+    //     authorizer.injectUsersRepository(usersRepository);
+    //     return authorizer;
+    // }
 
     // @Produces
     // @Built

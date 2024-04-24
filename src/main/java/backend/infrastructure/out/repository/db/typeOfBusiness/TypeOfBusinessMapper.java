@@ -1,0 +1,19 @@
+package backend.infrastructure.out.repository.db.typeOfBusiness;
+
+import backend.application.dto.TypeOfBusinessDto;
+
+public class TypeOfBusinessMapper {
+
+    public static TypeOfBusinessDto toDto(TypeOfBusiness typeOfBusiness) {
+        return new TypeOfBusinessDto(
+                typeOfBusiness.getId(),
+                typeOfBusiness.getTypeName());
+    }
+
+    public static TypeOfBusiness toEntity(TypeOfBusinessDto typeOfBusinessDto) {
+        TypeOfBusiness typeOfBusiness = new TypeOfBusiness();
+        typeOfBusiness.setId(typeOfBusinessDto.getId());
+        typeOfBusiness.setTypeName(typeOfBusinessDto.getTypeName());
+        return typeOfBusiness;
+    }
+}

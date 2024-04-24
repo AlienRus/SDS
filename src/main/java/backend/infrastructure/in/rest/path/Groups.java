@@ -1,6 +1,19 @@
 package backend.infrastructure.in.rest.path;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import backend.application.dto.GroupEtDto;
+import backend.application.dto.GroupEtsSignerDto;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
+import backend.infrastructure.out.repository.db.groupET.GroupEtRepository;
+import backend.infrastructure.out.repository.db.groupEtsSigner.GroupEtsSignerRepository;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -20,31 +33,104 @@ public class Groups {
     @Context
     private ContainerRequestContext requestContext;
 
+    @Inject
+    private GroupEtRepository groupEtRepository;
+
+    @Inject
+    private GroupEtsSignerRepository groupEtsSignerRepository;
+
+    private Jsonb jsonb = JsonbBuilder.create();
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
     public Response getGroups() {
-        return Response.status(Response.Status.OK).entity("[{\"groupId\": 1, \"name\": \"Group 1\"}, {\"groupId\": 2, \"name\": \"Group 2\"}]").build();
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            List<GroupEtDto> groups = groupEtRepository.getAllGroupEts();
+            List<JsonObject> groupsJSON = new ArrayList<JsonObject>();
+            for (GroupEtDto groupDto : groups) {
+                List<GroupEtsSignerDto> signerDto = groupEtsSignerRepository
+                        .getAllGroupEtsSignersByGroupEtsId(groupDto.getId());
+                JsonObject jsonObject = Json.createObjectBuilder()
+                        .add("name", groupDto.getGroupName())
+                        .add("managerPost", groupDto.getManagerPost())
+                        .add("managerFirstName", groupDto.getManagerFirstName())
+                        .add("managerLastName", groupDto.getManagerLastName())
+                        .add("managerMiddleName", groupDto.getManagerMiddleName())
+                        .add("signer", jsonb.toJson(signerDto))
+                        .build();
+                groupsJSON.add(jsonObject);
+            }
+            return Response.ok(groupsJSON).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @TokenRequired
     public Response addGroup(String requestBody) {
-        return Response.status(Response.Status.OK).entity("{\"message\": \"Group added successfully\"}").build();
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            GroupEtDto group = jsonb.fromJson(requestBody, GroupEtDto.class);
+            groupEtRepository.createGroupEt(group);
+            return Response.status(201).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @TokenRequired
     public Response updateGroup(String requestBody) {
-        return Response.status(Response.Status.OK).entity("{\"message\": \"Group updated successfully\"}").build();
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            GroupEtDto group = jsonb.fromJson(requestBody, GroupEtDto.class);
+            groupEtRepository.updateGroupEt(group);
+            return Response.status(201).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 
     @DELETE
     @TokenRequired
     @Path("/{groupId}")
-    public Response deleteGroup(@PathParam("groupId") int groupId) {
-        return Response.status(Response.Status.OK).entity("{\"message\": \"Group deleted successfully with ID: " + groupId + "\"}").build();
+    public Response deleteGroup(@PathParam("groupId") Long groupId) {
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            GroupEtDto group = groupEtRepository.getGroupEtById(groupId);
+            groupEtRepository.deleteGroupEt(group);
+            return Response.status(201).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 }
