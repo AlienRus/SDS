@@ -1,6 +1,5 @@
 package backend.infrastructure.out.repository.db.supplySpecialist;
 
-import backend.infrastructure.out.repository.db.typeOfBusiness.TypeOfBusiness;
 import backend.infrastructure.out.repository.db.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,11 +29,6 @@ public class SupplySpecialist {
     @NotNull
     @Column(name = "password", nullable = false, length = 64)
     private String password;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "type_of_business", nullable = false)
-    private TypeOfBusiness typeOfBusiness;
 
     @Size(max = 128)
     @NotNull
@@ -75,14 +69,6 @@ public class SupplySpecialist {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public TypeOfBusiness getTypeOfBusiness() {
-        return typeOfBusiness;
-    }
-
-    public void setTypeOfBusiness(TypeOfBusiness typeOfBusiness) {
-        this.typeOfBusiness = typeOfBusiness;
     }
 
     public String getCompany() {

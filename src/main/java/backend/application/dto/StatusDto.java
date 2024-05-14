@@ -1,16 +1,15 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.status.Status;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Status}
- */
 public class StatusDto implements Serializable {
-    private final Long id;
-    private final String statusName;
+    private Long id;
+    private String statusName;
+
+    public StatusDto() {
+
+    }
 
     public StatusDto(Long id, String statusName) {
         this.id = id;
@@ -46,5 +45,13 @@ public class StatusDto implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "statusName = " + statusName + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 }

@@ -1,34 +1,33 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.supplier.Supplier;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Supplier}
- */
 public class SupplierDto implements Serializable {
-    private final Long id;
-    private final RoleDto role;
-    private final String email;
-    private final String password;
-    private final TypeOfBusinessDto typeOfBusiness;
-    private final String company;
-    private final String firstName;
-    private final String middleName;
-    private final String lastName;
-    private final String phoneNumber;
-    private final String regionOrAddress;
-    private final Boolean nds;
-    private final String site;
-    private final Integer inn;
-    private final Integer kpp;
-    private final Boolean isApproved;
+    private Long id;
+    private RoleDto role;
+    private String email;
+    private String password;
+    private TypeOfBusinessDto typeOfBusiness;
+    private String company;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String phoneNumber;
+    private String regionOrAddress;
+    private Boolean nds;
+    private String site;
+    private Long inn;
+    private Long kpp;
+    private Boolean isApproved;
+
+    public SupplierDto() {
+
+    }
 
     public SupplierDto(Long id, RoleDto role, String email, String password, TypeOfBusinessDto typeOfBusiness,
             String company, String firstName, String middleName, String lastName, String phoneNumber,
-            String regionOrAddress, Boolean nds, String site, Integer inn, Integer kpp, Boolean isApproved) {
+            String regionOrAddress, Boolean nds, String site, Long inn, Long kpp, Boolean isApproved) {
         this.id = id;
         this.role = role;
         this.email = email;
@@ -99,11 +98,11 @@ public class SupplierDto implements Serializable {
         return site;
     }
 
-    public Integer getInn() {
+    public Long getInn() {
         return inn;
     }
 
-    public Integer getKpp() {
+    public Long getKpp() {
         return kpp;
     }
 
@@ -161,5 +160,69 @@ public class SupplierDto implements Serializable {
                 "inn = " + inn + ", " +
                 "kpp = " + kpp + ", " +
                 "isApproved = " + isApproved + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRole(RoleDto role) {
+        this.role = role;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setTypeOfBusiness(TypeOfBusinessDto typeOfBusiness) {
+        this.typeOfBusiness = typeOfBusiness;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setRegionOrAddress(String regionOrAddress) {
+        this.regionOrAddress = regionOrAddress;
+    }
+
+    public void setNds(Boolean nds) {
+        this.nds = nds;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public void setInn(Long inn) {
+        this.inn = inn;
+    }
+
+    public void setKpp(Long kpp) {
+        this.kpp = kpp;
+    }
+
+    public void setIsApproved(Boolean isApproved) {
+        this.isApproved = isApproved;
     }
 }

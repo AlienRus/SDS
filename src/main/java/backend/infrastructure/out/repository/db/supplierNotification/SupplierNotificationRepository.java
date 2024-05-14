@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.SupplierNotificationDto;
+import backend.application.interfaces.out.repository.ISupplierNotificationRepository;
 
 @Stateless
-public class SupplierNotificationRepository {
+public class SupplierNotificationRepository implements ISupplierNotificationRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

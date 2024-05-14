@@ -1,29 +1,26 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.supplySpecialist.SupplySpecialist;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link SupplySpecialist}
- */
 public class SupplySpecialistDto implements Serializable {
-    private final Long id;
-    private final RoleDto role;
-    private final String email;
-    private final String password;
-    private final TypeOfBusinessDto typeOfBusiness;
-    private final String company;
-    private final Boolean isApproved;
+    private Long id;
+    private RoleDto role;
+    private String email;
+    private String password;
+    private String company;
+    private Boolean isApproved;
 
-    public SupplySpecialistDto(Long id, RoleDto role, String email, String password, TypeOfBusinessDto typeOfBusiness,
+    public SupplySpecialistDto() {
+
+    }
+
+    public SupplySpecialistDto(Long id, RoleDto role, String email, String password,
             String company, Boolean isApproved) {
         this.id = id;
         this.role = role;
         this.email = email;
         this.password = password;
-        this.typeOfBusiness = typeOfBusiness;
         this.company = company;
         this.isApproved = isApproved;
     }
@@ -42,10 +39,6 @@ public class SupplySpecialistDto implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public TypeOfBusinessDto getTypeOfBusiness() {
-        return typeOfBusiness;
     }
 
     public String getCompany() {
@@ -67,14 +60,13 @@ public class SupplySpecialistDto implements Serializable {
                 Objects.equals(this.role, entity.role) &&
                 Objects.equals(this.email, entity.email) &&
                 Objects.equals(this.password, entity.password) &&
-                Objects.equals(this.typeOfBusiness, entity.typeOfBusiness) &&
                 Objects.equals(this.company, entity.company) &&
                 Objects.equals(this.isApproved, entity.isApproved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, email, password, typeOfBusiness, company, isApproved);
+        return Objects.hash(id, role, email, password, company, isApproved);
     }
 
     @Override
@@ -84,8 +76,31 @@ public class SupplySpecialistDto implements Serializable {
                 "role = " + role + ", " +
                 "email = " + email + ", " +
                 "password = " + password + ", " +
-                "typeOfBusiness = " + typeOfBusiness + ", " +
                 "company = " + company + ", " +
                 "isApproved = " + isApproved + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRole(RoleDto role) {
+        this.role = role;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public void setIsApproved(Boolean isApproved) {
+        this.isApproved = isApproved;
     }
 }

@@ -1,17 +1,16 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.lotFile.LotFile;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link LotFile}
- */
 public class LotFileDto implements Serializable {
-    private final Long id;
-    private final LotDto lot;
-    private final String path;
+    private Long id;
+    private LotDto lot;
+    private String path;
+
+    public LotFileDto() {
+
+    }
 
     public LotFileDto(Long id, LotDto lot, String path) {
         this.id = id;
@@ -54,5 +53,17 @@ public class LotFileDto implements Serializable {
                 "id = " + id + ", " +
                 "lot = " + lot + ", " +
                 "path = " + path + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

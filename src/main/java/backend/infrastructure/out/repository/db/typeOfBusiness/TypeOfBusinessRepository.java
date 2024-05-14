@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.TypeOfBusinessDto;
+import backend.application.interfaces.out.repository.ITypeOfBusinessRepository;
 
 @Stateless
-public class TypeOfBusinessRepository {
+public class TypeOfBusinessRepository implements ITypeOfBusinessRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

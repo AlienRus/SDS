@@ -1,17 +1,16 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.supplySpecialistGroup.SupplySpecialistGroup;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link SupplySpecialistGroup}
- */
 public class SupplySpecialistGroupDto implements Serializable {
-    private final Long id;
-    private final SupplySpecialistDto supplySpecialist;
-    private final GroupEtDto group;
+    private Long id;
+    private SupplySpecialistDto supplySpecialist;
+    private GroupEtDto group;
+
+    public SupplySpecialistGroupDto() {
+
+    }
 
     public SupplySpecialistGroupDto(Long id, SupplySpecialistDto supplySpecialist, GroupEtDto group) {
         this.id = id;
@@ -54,5 +53,17 @@ public class SupplySpecialistGroupDto implements Serializable {
                 "id = " + id + ", " +
                 "supplySpecialist = " + supplySpecialist + ", " +
                 "group = " + group + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSupplySpecialist(SupplySpecialistDto supplySpecialist) {
+        this.supplySpecialist = supplySpecialist;
+    }
+
+    public void setGroup(GroupEtDto group) {
+        this.group = group;
     }
 }

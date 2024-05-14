@@ -1,16 +1,15 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.shippingMethod.ShippingMethod;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link ShippingMethod}
- */
 public class ShippingMethodDto implements Serializable {
-    private final Long id;
-    private final String name;
+    private Long id;
+    private String name;
+
+    public ShippingMethodDto() {
+
+    }
 
     public ShippingMethodDto(Long id, String name) {
         this.id = id;
@@ -46,5 +45,13 @@ public class ShippingMethodDto implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "name = " + name + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

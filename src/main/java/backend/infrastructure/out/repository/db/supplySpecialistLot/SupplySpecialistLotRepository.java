@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.SupplySpecialistLotDto;
+import backend.application.interfaces.out.repository.ISupplySpecialistLotRepository;
 
 @Stateless
-public class SupplySpecialistLotRepository {
+public class SupplySpecialistLotRepository implements ISupplySpecialistLotRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -26,11 +27,13 @@ public class SupplySpecialistLotRepository {
     public List<SupplySpecialistLotDto> getSupplySpecialistLotsByIdAndStatus(Long id, String status) {
         List<SupplySpecialistLot> supplySpecialistLots = entityManager
                 .createQuery(
-                        "SELECT ssl FROM SupplySpecialistLot ssl",
+                        "SELECT ssl FROM SupplySpecialistLot ssl WHERE ssl.supplySpecialist.id=:id AND ssl.lot.status.statusName=:status",
                         SupplySpecialistLot.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
                 .getResultList();
 
-        return supplySpecialistLots.stream().filter(x -> x.getLot().getStatus().getStatusName().equals(status))
+        return supplySpecialistLots.stream()
                 .map(SupplySpecialistLotMapper::toDto).collect(Collectors.toList());
     }
 

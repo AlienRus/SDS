@@ -1,16 +1,15 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.typeOfBusiness.TypeOfBusiness;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link TypeOfBusiness}
- */
 public class TypeOfBusinessDto implements Serializable {
-    private final Long id;
-    private final String typeName;
+    private Long id;
+    private String typeName;
+
+    public TypeOfBusinessDto() {
+
+    }
 
     public TypeOfBusinessDto(Long id, String typeName) {
         this.id = id;
@@ -46,5 +45,13 @@ public class TypeOfBusinessDto implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "typeName = " + typeName + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 }

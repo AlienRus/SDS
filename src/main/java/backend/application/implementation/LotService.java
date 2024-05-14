@@ -38,20 +38,6 @@ public class LotService implements ILotService {
     }
 
     @Override
-    public void createLotWithData(LotDto lotDto, int lotCreatorId, int statusId, int groupEtsId) {
-        SupplySpecialistDto supplySpecialistDto = supplySpecialistRepository
-                .getSupplySpecialistById(Long.valueOf(lotCreatorId));
-        StatusDto statusDto = statusRepository.getStatusById(Long.valueOf(statusId));
-        GroupEtDto groupEtDto = groupEtRepository.getGroupEtById(Long.valueOf(groupEtsId));
-
-        lotDto.setLotCreator(supplySpecialistDto);
-        lotDto.setStatus(statusDto);
-        lotDto.setGroupEts(groupEtDto);
-
-        lotRepository.createLot(lotDto);
-    }
-
-    @Override
     public LotDto getLotById(Long id) {
         return lotRepository.getLotById(id);
     }
@@ -74,6 +60,20 @@ public class LotService implements ILotService {
     @Override
     public void deleteLot(LotDto lotDto) {
         lotRepository.deleteLot(lotDto);
+    }
+
+    @Override
+    public void createLotWithData(LotDto lotDto, int lotCreatorId, int statusId, int groupEtsId) {
+        SupplySpecialistDto supplySpecialistDto = supplySpecialistRepository
+                .getSupplySpecialistById(Long.valueOf(lotCreatorId));
+        StatusDto statusDto = statusRepository.getStatusById(Long.valueOf(statusId));
+        GroupEtDto groupEtDto = groupEtRepository.getGroupEtById(Long.valueOf(groupEtsId));
+
+        lotDto.setLotCreator(supplySpecialistDto);
+        lotDto.setStatus(statusDto);
+        lotDto.setGroupEts(groupEtDto);
+
+        lotRepository.createLot(lotDto);
     }
 
 }

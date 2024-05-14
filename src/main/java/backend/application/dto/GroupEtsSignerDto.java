@@ -1,20 +1,19 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.groupEtsSigner.GroupEtsSigner;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link GroupEtsSigner}
- */
 public class GroupEtsSignerDto implements Serializable {
-    private final Long id;
-    private final GroupEtDto groupEts;
-    private final String post;
-    private final String firstName;
-    private final String lastName;
-    private final String middleName;
+    private Long id;
+    private GroupEtDto groupEts;
+    private String post;
+    private String firstName;
+    private String lastName;
+    private String middleName;
+
+    public GroupEtsSignerDto() {
+
+    }
 
     public GroupEtsSignerDto(Long id, GroupEtDto groupEts, String post, String firstName, String lastName,
             String middleName) {
@@ -79,5 +78,29 @@ public class GroupEtsSignerDto implements Serializable {
                 "firstName = " + firstName + ", " +
                 "lastName = " + lastName + ", " +
                 "middleName = " + middleName + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setGroupEts(GroupEtDto groupEts) {
+        this.groupEts = groupEts;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 }

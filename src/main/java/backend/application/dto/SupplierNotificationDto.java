@@ -1,19 +1,18 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.supplierNotification.SupplierNotification;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link SupplierNotification}
- */
 public class SupplierNotificationDto implements Serializable {
-    private final Long id;
-    private final SupplierDto supplier;
-    private final GroupEtDto group;
-    private final Byte mail;
-    private final Byte system;
+    private Long id;
+    private SupplierDto supplier;
+    private GroupEtDto group;
+    private Byte mail;
+    private Byte system;
+
+    public SupplierNotificationDto() {
+
+    }
 
     public SupplierNotificationDto(Long id, SupplierDto supplier, GroupEtDto group, Byte mail, Byte system) {
         this.id = id;
@@ -70,5 +69,25 @@ public class SupplierNotificationDto implements Serializable {
                 "group = " + group + ", " +
                 "mail = " + mail + ", " +
                 "system = " + system + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
+    }
+
+    public void setGroup(GroupEtDto group) {
+        this.group = group;
+    }
+
+    public void setMail(Byte mail) {
+        this.mail = mail;
+    }
+
+    public void setSystem(Byte system) {
+        this.system = system;
     }
 }

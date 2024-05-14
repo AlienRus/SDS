@@ -7,6 +7,9 @@ import backend.infrastructure.out.repository.db.role.RoleMapper;
 public class SupplierMapper {
 
     public static SupplierDto toDto(Supplier supplier) {
+        if (supplier == null) {
+            return null;
+        }
         return new SupplierDto(
                 supplier.getId(),
                 RoleMapper.toDto(supplier.getRole()),
@@ -27,6 +30,10 @@ public class SupplierMapper {
     }
 
     public static Supplier toEntity(SupplierDto supplierDto) {
+        if (supplierDto == null) {
+            return null;
+        }
+
         Supplier supplier = new Supplier();
         supplier.setId(supplierDto.getId());
         supplier.setRole(RoleMapper.toEntity(supplierDto.getRole()));

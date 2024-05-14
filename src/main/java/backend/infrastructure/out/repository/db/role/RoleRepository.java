@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.RoleDto;
+import backend.application.interfaces.out.repository.IRoleRepository;
 
 @Stateless
-public class RoleRepository {
+public class RoleRepository implements IRoleRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

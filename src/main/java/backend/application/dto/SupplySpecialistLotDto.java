@@ -1,17 +1,16 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.supplySpecialistLot.SupplySpecialistLot;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link SupplySpecialistLot}
- */
 public class SupplySpecialistLotDto implements Serializable {
-    private final Long id;
-    private final SupplySpecialistDto supplySpecialist;
-    private final LotDto lot;
+    private Long id;
+    private SupplySpecialistDto supplySpecialist;
+    private LotDto lot;
+
+    public SupplySpecialistLotDto() {
+
+    }
 
     public SupplySpecialistLotDto(Long id, SupplySpecialistDto supplySpecialist, LotDto lot) {
         this.id = id;
@@ -54,5 +53,17 @@ public class SupplySpecialistLotDto implements Serializable {
                 "id = " + id + ", " +
                 "supplySpecialist = " + supplySpecialist + ", " +
                 "lot = " + lot + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSupplySpecialist(SupplySpecialistDto supplySpecialist) {
+        this.supplySpecialist = supplySpecialist;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
     }
 }

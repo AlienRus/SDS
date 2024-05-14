@@ -1,18 +1,23 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.lotRule.LotRule;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link LotRule}
- */
 public class LotRuleDto implements Serializable {
-    private final Long id;
-    private final ShippingMethodDto shippingMethod;
-    private final PaymentMethodDto paymentMethod;
-    private final String comment;
+    private Long id;
+    private ShippingMethodDto shippingMethod;
+    private PaymentMethodDto paymentMethod;
+    private String comment;
+
+    public LotRuleDto() {
+
+    }
+
+    public LotRuleDto(ShippingMethodDto shippingMethod, PaymentMethodDto paymentMethod, String comment) {
+        this.shippingMethod = shippingMethod;
+        this.paymentMethod = paymentMethod;
+        this.comment = comment;
+    }
 
     public LotRuleDto(Long id, ShippingMethodDto shippingMethod, PaymentMethodDto paymentMethod, String comment) {
         this.id = id;
@@ -62,5 +67,21 @@ public class LotRuleDto implements Serializable {
                 "shippingMethod = " + shippingMethod + ", " +
                 "paymentMethod = " + paymentMethod + ", " +
                 "comment = " + comment + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setShippingMethod(ShippingMethodDto shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethodDto paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

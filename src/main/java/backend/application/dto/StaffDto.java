@@ -1,18 +1,17 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.staff.Staff;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Staff}
- */
 public class StaffDto implements Serializable {
-    private final Long id;
-    private final String email;
-    private final String password;
-    private final RoleDto role;
+    private Long id;
+    private String email;
+    private String password;
+    private RoleDto role;
+
+    public StaffDto() {
+        
+    }
 
     public StaffDto(Long id, String email, String password, RoleDto role) {
         this.id = id;
@@ -62,5 +61,21 @@ public class StaffDto implements Serializable {
                 "email = " + email + ", " +
                 "password = " + password + ", " +
                 "role = " + role + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(RoleDto role) {
+        this.role = role;
     }
 }

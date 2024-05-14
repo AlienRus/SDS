@@ -75,11 +75,11 @@ public class Supplier {
 
     @NotNull
     @Column(name = "INN", nullable = false)
-    private Integer inn;
+    private Long inn;
 
     @NotNull
     @Column(name = "KPP", nullable = false)
-    private Integer kpp;
+    private Long kpp;
 
     @NotNull
     @Column(name = "is_approved", nullable = false)
@@ -189,19 +189,19 @@ public class Supplier {
         this.site = site;
     }
 
-    public Integer getInn() {
+    public Long getInn() {
         return inn;
     }
 
-    public void setInn(Integer inn) {
+    public void setInn(Long inn) {
         this.inn = inn;
     }
 
-    public Integer getKpp() {
+    public Long getKpp() {
         return kpp;
     }
 
-    public void setKpp(Integer kpp) {
+    public void setKpp(Long kpp) {
         this.kpp = kpp;
     }
 

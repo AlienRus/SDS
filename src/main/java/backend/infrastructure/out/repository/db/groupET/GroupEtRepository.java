@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.GroupEtDto;
+import backend.application.interfaces.out.repository.IGroupEtRepository;
 
 @Stateless
-public class GroupEtRepository {
+public class GroupEtRepository implements IGroupEtRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

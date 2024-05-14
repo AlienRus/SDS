@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.StaffDto;
+import backend.application.interfaces.out.repository.IStaffRepository;
 
 @Stateless
-public class StaffRepository {
+public class StaffRepository implements IStaffRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

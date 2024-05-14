@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.PaymentMethodDto;
+import backend.application.interfaces.out.repository.IPaymentMethodRepository;
 
 @Stateless
-public class PaymentMethodRepository {
+public class PaymentMethodRepository implements IPaymentMethodRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

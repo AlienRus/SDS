@@ -1,15 +1,11 @@
 package backend.infrastructure.in.rest.path;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import backend.application.dto.SupplierDto;
+import backend.application.interfaces.in.ISupplierService;
+import backend.infrastructure.builder.Built;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
-import backend.infrastructure.out.repository.db.supplier.SupplierRepository;
+import backend.infrastructure.out.response.SupplierByIdResponse;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import jakarta.json.bind.JsonbException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -27,7 +23,8 @@ public class Suppliers {
     private ContainerRequestContext requestContext;
 
     @Inject
-    private SupplierRepository supplierRepository;
+    @Built
+    private ISupplierService supplierService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,29 +37,10 @@ public class Suppliers {
         }
 
         try {
-            List<SupplierDto> supplierDtos = supplierRepository.getAllSuppliers();
-            List<JsonObject> dataJson = new ArrayList<JsonObject>();
-            for (SupplierDto supplierDto : supplierDtos) {
-                JsonObjectBuilder builder = Json.createObjectBuilder()
-                        .add("email", getValueOrEmpty(supplierDto.getEmail()))
-                        .add("typeOfBusiness",
-                                getValueOrEmpty(supplierDto.getTypeOfBusiness() != null
-                                        ? supplierDto.getTypeOfBusiness().getTypeName()
-                                        : null))
-                        .add("company", getValueOrEmpty(supplierDto.getCompany()))
-                        .add("firstName", getValueOrEmpty(supplierDto.getFirstName()))
-                        .add("lastName", getValueOrEmpty(supplierDto.getLastName()))
-                        .add("middleName", getValueOrEmpty(supplierDto.getMiddleName()))
-                        .add("phoneNumber", getValueOrEmpty(supplierDto.getPhoneNumber()))
-                        .add("regionOrAddress", getValueOrEmpty(supplierDto.getRegionOrAddress()))
-                        .add("site", getValueOrEmpty(supplierDto.getSite()))
-                        .add("inn", supplierDto.getInn())
-                        .add("kpp", supplierDto.getKpp());
 
-                dataJson.add(builder.build());
-            }
+            SupplierDto supplierDto = supplierService.getSupplierById(supplierId);
 
-            return Response.ok(dataJson).build();
+            return Response.ok(new SupplierByIdResponse(supplierDto)).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -70,7 +48,4 @@ public class Suppliers {
         }
     }
 
-    private String getValueOrEmpty(String value) {
-        return value != null ? value : "";
-    }
 }

@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.LotDto;
-import backend.infrastructure.out.repository.db.groupET.GroupEt;
+import backend.application.interfaces.out.repository.ILotRepository;
 
 @Stateless
-public class LotRepository {
+public class LotRepository implements ILotRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

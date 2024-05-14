@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.ShippingMethodDto;
+import backend.application.interfaces.out.repository.IShippingMethodRepository;
 
 @Stateless
-public class ShippingMethodRepository {
+public class ShippingMethodRepository implements IShippingMethodRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

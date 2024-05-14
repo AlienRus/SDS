@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.LotFileDto;
+import backend.application.interfaces.out.repository.ILotFileRepository;
 
 @Stateless
-public class LotFileRepository {
+public class LotFileRepository implements ILotFileRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

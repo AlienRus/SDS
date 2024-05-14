@@ -1,24 +1,23 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.lot.Lot;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- * DTO for {@link Lot}
- */
 public class LotDto implements Serializable {
-    private final Long id;
-    private final String name;
-    private final LocalDate openDate;
-    private final LocalDate closeDate;
-    private final StatusDto status;
-    private final Boolean canOwnWay;
-    private final SupplySpecialistDto lotCreator;
-    private final LotRuleDto rules;
-    private final GroupEtDto groupEts;
+    private Long id;
+    private String name;
+    private LocalDate openDate;
+    private LocalDate closeDate;
+    private StatusDto status;
+    private Boolean canOwnWay;
+    private SupplySpecialistDto lotCreator;
+    private LotRuleDto rules;
+    private GroupEtDto groupEts;
+
+    public LotDto() {
+
+    }
 
     public LotDto(Long id, String name, LocalDate openDate, LocalDate closeDate, StatusDto status, Boolean canOwnWay,
             SupplySpecialistDto lotCreator, LotRuleDto rules, GroupEtDto groupEts) {
@@ -104,5 +103,41 @@ public class LotDto implements Serializable {
                 "lotCreator = " + lotCreator + ", " +
                 "rules = " + rules + ", " +
                 "groupEts = " + groupEts + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOpenDate(LocalDate openDate) {
+        this.openDate = openDate;
+    }
+
+    public void setCloseDate(LocalDate closeDate) {
+        this.closeDate = closeDate;
+    }
+
+    public void setStatus(StatusDto status) {
+        this.status = status;
+    }
+
+    public void setCanOwnWay(Boolean canOwnWay) {
+        this.canOwnWay = canOwnWay;
+    }
+
+    public void setLotCreator(SupplySpecialistDto lotCreator) {
+        this.lotCreator = lotCreator;
+    }
+
+    public void setRules(LotRuleDto rules) {
+        this.rules = rules;
+    }
+
+    public void setGroupEts(GroupEtDto groupEts) {
+        this.groupEts = groupEts;
     }
 }

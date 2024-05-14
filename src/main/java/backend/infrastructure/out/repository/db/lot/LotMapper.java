@@ -5,6 +5,8 @@ import backend.infrastructure.out.repository.db.groupET.GroupEtMapper;
 import backend.infrastructure.out.repository.db.lotRule.LotRuleMapper;
 import backend.infrastructure.out.repository.db.status.StatusMapper;
 import backend.infrastructure.out.repository.db.supplySpecialist.SupplySpecialistMapper;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LotMapper {
 
@@ -22,6 +24,7 @@ public class LotMapper {
     }
 
     public static Lot toEntity(LotDto lotDto) {
+        Logger.getLogger(LotMapper.class.getName()).log(Level.WARNING, lotDto.toString());
         Lot lot = new Lot();
         lot.setId(lotDto.getId());
         lot.setName(lotDto.getName());

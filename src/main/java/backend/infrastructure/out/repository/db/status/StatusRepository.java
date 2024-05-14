@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.StatusDto;
+import backend.application.interfaces.out.repository.IStatusRepository;
 
 @Stateless
-public class StatusRepository {
+public class StatusRepository implements IStatusRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

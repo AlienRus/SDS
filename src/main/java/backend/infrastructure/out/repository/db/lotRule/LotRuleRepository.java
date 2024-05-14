@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.LotRuleDto;
+import backend.application.interfaces.out.repository.ILotRuleRepository;
 
 @Stateless
-public class LotRuleRepository {
+public class LotRuleRepository implements ILotRuleRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

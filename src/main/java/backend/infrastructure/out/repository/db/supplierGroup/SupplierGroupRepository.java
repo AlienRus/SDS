@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.SupplierGroupDto;
+import backend.application.interfaces.out.repository.ISupplierGroupRepository;
 
 @Stateless
-public class SupplierGroupRepository {
+public class SupplierGroupRepository implements ISupplierGroupRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

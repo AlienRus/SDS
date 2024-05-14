@@ -1,16 +1,15 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.role.Role;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Role}
- */
 public class RoleDto implements Serializable {
-    private final Long id;
-    private final String roleName;
+    private Long id;
+    private String roleName;
+
+    public RoleDto() {
+
+    }
 
     public RoleDto(Long id, String roleName) {
         this.id = id;
@@ -46,5 +45,13 @@ public class RoleDto implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "roleName = " + roleName + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

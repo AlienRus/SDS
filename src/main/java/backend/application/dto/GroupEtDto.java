@@ -1,21 +1,20 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.groupET.GroupEt;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link GroupEt}
- */
 public class GroupEtDto implements Serializable {
-    private final Long id;
-    private final String name;
-    private final String managerPost;
-    private final String managerFirstName;
-    private final String managerMiddleName;
-    private final String managerLastName;
-    private final String notificationTest;
+    private Long id;
+    private String name;
+    private String managerPost;
+    private String managerFirstName;
+    private String managerMiddleName;
+    private String managerLastName;
+    private String notificationTest;
+
+    public GroupEtDto() {
+
+    }
 
     public GroupEtDto(Long id, String groupName, String managerPost, String managerFirstName, String managerMiddleName,
             String managerLastName, String notificationTest) {
@@ -88,5 +87,33 @@ public class GroupEtDto implements Serializable {
                 "managerMiddleName = " + managerMiddleName + ", " +
                 "managerLastName = " + managerLastName + ", " +
                 "notificationTest = " + notificationTest + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setManagerPost(String managerPost) {
+        this.managerPost = managerPost;
+    }
+
+    public void setManagerFirstName(String managerFirstName) {
+        this.managerFirstName = managerFirstName;
+    }
+
+    public void setManagerMiddleName(String managerMiddleName) {
+        this.managerMiddleName = managerMiddleName;
+    }
+
+    public void setManagerLastName(String managerLastName) {
+        this.managerLastName = managerLastName;
+    }
+
+    public void setNotificationTest(String notificationTest) {
+        this.notificationTest = notificationTest;
     }
 }

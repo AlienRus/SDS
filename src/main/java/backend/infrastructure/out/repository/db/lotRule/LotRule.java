@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Size;
 public class LotRule {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

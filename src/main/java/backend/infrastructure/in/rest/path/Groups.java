@@ -5,12 +5,12 @@ import java.util.List;
 
 import backend.application.dto.GroupEtDto;
 import backend.application.dto.GroupEtsSignerDto;
+import backend.application.interfaces.in.IGroupEtService;
+import backend.application.interfaces.in.IGroupEtsSignerService;
+import backend.infrastructure.builder.Built;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
-import backend.infrastructure.out.repository.db.groupET.GroupEtRepository;
-import backend.infrastructure.out.repository.db.groupEtsSigner.GroupEtsSignerRepository;
+import backend.infrastructure.out.response.GroupResponse;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -34,10 +34,12 @@ public class Groups {
     private ContainerRequestContext requestContext;
 
     @Inject
-    private GroupEtRepository groupEtRepository;
+    @Built
+    private IGroupEtService groupEtService;
 
     @Inject
-    private GroupEtsSignerRepository groupEtsSignerRepository;
+    @Built
+    private IGroupEtsSignerService groupEtsSignerService;
 
     private Jsonb jsonb = JsonbBuilder.create();
 
@@ -51,22 +53,18 @@ public class Groups {
         }
 
         try {
-            List<GroupEtDto> groups = groupEtRepository.getAllGroupEts();
-            List<JsonObject> groupsJSON = new ArrayList<JsonObject>();
-            for (GroupEtDto groupDto : groups) {
-                List<GroupEtsSignerDto> signerDto = groupEtsSignerRepository
-                        .getAllGroupEtsSignersByGroupEtsId(groupDto.getId());
-                JsonObject jsonObject = Json.createObjectBuilder()
-                        .add("name", groupDto.getGroupName())
-                        .add("managerPost", groupDto.getManagerPost())
-                        .add("managerFirstName", groupDto.getManagerFirstName())
-                        .add("managerLastName", groupDto.getManagerLastName())
-                        .add("managerMiddleName", groupDto.getManagerMiddleName())
-                        .add("signer", jsonb.toJson(signerDto))
-                        .build();
-                groupsJSON.add(jsonObject);
+            List<GroupEtDto> groups = groupEtService.getAllGroupEts();
+
+            List<GroupResponse> responses = new ArrayList<GroupResponse>();
+
+            for (GroupEtDto group : groups) {
+                List<GroupEtsSignerDto> signers = groupEtsSignerService.getAllGroupEtsSignersByGroupEtsId(group.getId());
+
+                responses.add(new GroupResponse(group, signers));
             }
-            return Response.ok(groupsJSON).build();
+
+            return Response.ok(responses).build();
+
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -85,7 +83,7 @@ public class Groups {
 
         try {
             GroupEtDto group = jsonb.fromJson(requestBody, GroupEtDto.class);
-            groupEtRepository.createGroupEt(group);
+            groupEtService.createGroupEt(group);
             return Response.status(201).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -105,7 +103,7 @@ public class Groups {
 
         try {
             GroupEtDto group = jsonb.fromJson(requestBody, GroupEtDto.class);
-            groupEtRepository.updateGroupEt(group);
+            groupEtService.updateGroupEt(group);
             return Response.status(201).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -124,8 +122,8 @@ public class Groups {
         }
 
         try {
-            GroupEtDto group = groupEtRepository.getGroupEtById(groupId);
-            groupEtRepository.deleteGroupEt(group);
+            GroupEtDto group = groupEtService.getGroupEtById(groupId);
+            groupEtService.deleteGroupEt(group);
             return Response.status(201).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();

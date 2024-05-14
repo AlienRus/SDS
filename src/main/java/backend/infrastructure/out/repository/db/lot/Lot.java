@@ -50,7 +50,7 @@ public class Lot {
     private SupplySpecialist lotCreator;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "rules", nullable = false)
     private LotRule rules;
 

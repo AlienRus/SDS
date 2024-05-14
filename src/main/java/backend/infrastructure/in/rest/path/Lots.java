@@ -3,19 +3,34 @@ package backend.infrastructure.in.rest.path;
 import java.util.ArrayList;
 import java.util.List;
 
+import backend.application.dto.GroupEtDto;
 import backend.application.dto.LotDto;
+import backend.application.dto.LotFileDto;
+import backend.application.dto.LotPositionDto;
+import backend.application.dto.LotRuleDto;
+import backend.application.dto.PaymentMethodDto;
 import backend.application.dto.PositionDto;
-import backend.application.dto.PositionRequestDto;
+import backend.application.dto.ShippingMethodDto;
+import backend.application.dto.StatusDto;
+import backend.application.dto.SupplySpecialistDto;
 import backend.application.dto.SupplySpecialistLotDto;
+import backend.application.interfaces.in.IGroupEtService;
+import backend.application.interfaces.in.ILotFileService;
+import backend.application.interfaces.in.ILotPositionService;
+import backend.application.interfaces.in.ILotService;
+import backend.application.interfaces.in.IPaymentMethodService;
+import backend.application.interfaces.in.IPositionService;
+import backend.application.interfaces.in.IShippingMethodService;
+import backend.application.interfaces.in.IStatusService;
+import backend.application.interfaces.in.ISupplySpecialistLotService;
+import backend.application.interfaces.in.ISupplySpecialistService;
+import backend.infrastructure.builder.Built;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
-import backend.infrastructure.out.repository.db.lot.LotRepository;
-import backend.infrastructure.out.repository.db.lotFile.LotFileRepository;
-import backend.infrastructure.out.repository.db.lotPosition.LotPositionRepository;
-import backend.infrastructure.out.repository.db.supplySpecialistLot.SupplySpecialistLotRepository;
+import backend.infrastructure.in.rest.request.LotRequestDto;
+import backend.infrastructure.out.response.LotByGroupResponse;
+import backend.infrastructure.out.response.LotByIdResponse;
+import backend.infrastructure.out.response.LotByUserAndStatusResponse;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -36,13 +51,44 @@ import jakarta.ws.rs.core.Response;
 public class Lots {
 
     @Inject
-    private LotRepository lotRepository;
+    @Built
+    private ILotService lotService;
 
     @Inject
-    private LotFileRepository lotFileRepository;
+    @Built
+    private ILotPositionService lotPositionService;
 
     @Inject
-    private SupplySpecialistLotRepository supplySpecialistLotRepository;
+    @Built
+    private ILotFileService lotFileService;
+
+    @Inject
+    @Built
+    private IPositionService positionService;
+
+    @Inject
+    @Built
+    private ISupplySpecialistService supplySpecialistService;
+
+    @Inject
+    @Built
+    private ISupplySpecialistLotService supplySpecialistLotService;
+
+    @Inject
+    @Built
+    private IStatusService statusService;
+
+    @Inject
+    @Built
+    private IShippingMethodService shippingMethodService;
+
+    @Inject
+    @Built
+    private IPaymentMethodService paymentMethodService;
+
+    @Inject
+    @Built
+    private IGroupEtService groupEtService;
 
     @Context
     private ContainerRequestContext requestContext;
@@ -52,15 +98,34 @@ public class Lots {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @TokenRequired
+    @TokenRequired // +
     public Response addLot(String lotDataJSON) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
-            LotDto lot = jsonb.fromJson(lotDataJSON, LotDto.class);
-            lotRepository.createLot(lot);
+
+            LotRequestDto lotRequestDto = jsonb.fromJson(lotDataJSON, LotRequestDto.class);
+
+            StatusDto statusDto = statusService.getStatusById(lotRequestDto.getStatusId());
+            SupplySpecialistDto supplySpecialistDto = supplySpecialistService
+                    .getSupplySpecialistById(lotRequestDto.getLotCreatorId());
+            ShippingMethodDto shippingMethodDto = shippingMethodService
+                    .getShippingMethodById(lotRequestDto.getRules().getShippingMethodId());
+            PaymentMethodDto paymentMethodDto = paymentMethodService
+                    .getPaymentMethodById(lotRequestDto.getRules().getPaymentMethodId());
+
+            LotRuleDto lotRuleDto = new LotRuleDto(shippingMethodDto, paymentMethodDto,
+                    lotRequestDto.getRules().getComment());
+
+            GroupEtDto groupEtDto = groupEtService.getGroupEtById(lotRequestDto.getGroupEtsId());
+
+            LotDto lotDto = new LotDto(lotRequestDto.getId(), lotRequestDto.getName(), lotRequestDto.getOpenDate(),
+                    lotRequestDto.getCloseDate(), statusDto, lotRequestDto.isCanOwnWay(), supplySpecialistDto,
+                    lotRuleDto, groupEtDto);
+
+            lotService.createLot(lotDto);
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -71,8 +136,43 @@ public class Lots {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @TokenRequired // +
+    public Response getLots() {
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            List<LotDto> lotDtos = lotService.getAllLots();
+
+            List<LotByIdResponse> responses = new ArrayList<LotByIdResponse>();
+
+            for (LotDto lotDto : lotDtos) {
+                List<LotFileDto> lotFileDtos = lotFileService.getAllLotFilesByLotId(lotDto.getId());
+                LotFileDto lotFileDto;
+                if (lotFileDtos.isEmpty()) {
+                    lotFileDto = null;
+                } else {
+
+                    lotFileDto = lotFileDtos.get(0);
+                }
+                responses.add(new LotByIdResponse(lotDto, lotFileDto));
+            }
+
+            return Response.ok(responses).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
+
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
-    @Path("/{lotId}")
+    @Path("/{lotId}") // +
     public Response getLot(@PathParam("lotId") Long lotId) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
@@ -80,24 +180,16 @@ public class Lots {
         }
 
         try {
-            LotDto lotDto = lotRepository.getLotById(lotId);
-            JsonObjectBuilder builder = Json.createObjectBuilder()
-                    .add("name", lotDto.getName())
-                    .add("openDate", lotDto.getOpenDate().toString())
-                    .add("closeDate", lotDto.getCloseDate().toString())
-                    .add("status", lotDto.getStatus().getStatusName())
-                    .add("canOwnWay", lotDto.getCanOwnWay())
-                    .add("lotCreator", lotDto.getLotCreator().getEmail())
-                    .add("groupEts", lotDto.getGroupEts().getGroupName());
+            LotDto lotDto = lotService.getLotById(lotId);
+            List<LotFileDto> lotFileDtos = lotFileService.getAllLotFilesByLotId(lotDto.getId());
+            LotFileDto lotFileDto;
+            if (lotFileDtos.isEmpty()) {
+                lotFileDto = null;
+            } else {
+                lotFileDto = lotFileDtos.get(0);
+            }
 
-            builder.add("rules", jsonb.toJson(lotDto.getRules()));
-            builder.add("lotFiles", jsonb.toJson(lotFileRepository.getAllLotFilesByLotId(lotId)));
-
-            // Создаем JsonObject из построителя
-            JsonObject responseJson = builder.build();
-
-            // Возвращаем успешный ответ с JSON
-            return Response.ok(responseJson).build();
+            return Response.ok(new LotByIdResponse(lotDto, lotFileDto)).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -119,7 +211,7 @@ public class Lots {
 
         try {
             LotDto lot = jsonb.fromJson(lotDataJSON, LotDto.class);
-            lotRepository.updateLot(lot);
+            lotService.updateLot(lot);
             return Response.ok(lot).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -130,7 +222,7 @@ public class Lots {
 
     @DELETE
     @TokenRequired
-    @Path("/{lotId}")
+    @Path("/{lotId}") // +
     public Response deleteLot(@PathParam("lotId") Long lotId) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
@@ -138,9 +230,9 @@ public class Lots {
         }
 
         try {
-            LotDto lot = lotRepository.getLotById(lotId);
-            lotRepository.deleteLot(lot);
-            return Response.ok(lot).build();
+            LotDto lot = lotService.getLotById(lotId);
+            lotService.deleteLot(lot);
+            return Response.ok().build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -152,13 +244,18 @@ public class Lots {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
-    @Path("/{lotId}/positions")
+    @Path("/{lotId}/positions") // +
+    // Добавление позиции в лот
     public Response addPositionToLot(String positionRequestJSON, @PathParam("lotId") Long lotId) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
+            LotDto lotDto = lotService.getLotById(lotId);
+            PositionDto positionDto = jsonb.fromJson(positionRequestJSON, PositionDto.class);
+            LotPositionDto lotPositionDto = new LotPositionDto(positionDto.getId(), lotDto, positionDto);
+            lotPositionService.createLotPosition(lotPositionDto);
 
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -171,7 +268,8 @@ public class Lots {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
-    @Path("/{userId}/statuses/{status}")
+    @Path("/{userId}/statuses/{status}") // +
+    // Получение информации о лотах юзера по указанному статусу
     public Response getLotsByUserAndStatus(@PathParam("userId") Long userId, @PathParam("status") String status) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
@@ -179,9 +277,16 @@ public class Lots {
         }
 
         try {
-            List<SupplySpecialistLotDto> data = supplySpecialistLotRepository
+            List<SupplySpecialistLotDto> specialistLotDtos = supplySpecialistLotService
                     .getSupplySpecialistLotsByIdAndStatus(userId, status);
-            return Response.ok(data).build();
+
+            List<LotByUserAndStatusResponse> responses = new ArrayList<LotByUserAndStatusResponse>();
+
+            for (SupplySpecialistLotDto specialistLotDto : specialistLotDtos) {
+                responses.add(new LotByUserAndStatusResponse(specialistLotDto.getLot()));
+            }
+
+            return Response.ok(responses).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -193,7 +298,8 @@ public class Lots {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
-    @Path("/groups/{groupId}")
+    @Path("/groups/{groupId}") // +
+    // Получение информации о лотах по группе
     public Response getLotsByGroup(@PathParam("groupId") Long groupId) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
@@ -201,18 +307,15 @@ public class Lots {
         }
 
         try {
-            List<LotDto> lotDtos = lotRepository.getAllLotsByGroup(groupId);
-            List<JsonObject> dataJson = new ArrayList<JsonObject>();
+            List<LotDto> lotDtos = lotService.getAllLotsByGroup(groupId);
+
+            List<LotByGroupResponse> responses = new ArrayList<LotByGroupResponse>();
+
             for (LotDto lotDto : lotDtos) {
-                JsonObjectBuilder builder = Json.createObjectBuilder()
-                        .add("id", lotDto.getId())
-                        .add("name", lotDto.getName())
-                        .add("openDate", lotDto.getOpenDate().toString())
-                        .add("closeDate", lotDto.getCloseDate().toString());
-                dataJson.add(builder.build());
+                responses.add(new LotByGroupResponse(lotDto));
             }
 
-            return Response.ok(dataJson).build();
+            return Response.ok(responses).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {

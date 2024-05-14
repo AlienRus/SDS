@@ -1,7 +1,5 @@
 package backend.infrastructure.in.rest.path;
 
-import backend.infrastructure.out.repository.db.contact.ContactRepository;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,14 +14,12 @@ public class Service {
     @Context
     private ContainerRequestContext requestContext;
 
-    @Inject
-    private ContactRepository repository;
-
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     public Response ping(String requestBody) {
-        return Response.ok(repository.getAllContacts()).build();
-        // return Response.status(Response.Status.OK).entity("{\"message\": \"Reset request created successfully\"}").build();
+        return Response.ok().build();
+        // return Response.status(Response.Status.OK).entity("{\"message\": \"Reset
+        // request created successfully\"}").build();
     }
-   
+
 }

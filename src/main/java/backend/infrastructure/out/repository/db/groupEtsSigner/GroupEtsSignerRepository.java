@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.GroupEtsSignerDto;
+import backend.application.interfaces.out.repository.IGroupEtsSignerRepository;
 
 @Stateless
-public class GroupEtsSignerRepository {
+public class GroupEtsSignerRepository implements IGroupEtsSignerRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
