@@ -21,7 +21,7 @@ public class LotPosition {
     private Lot lot;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 

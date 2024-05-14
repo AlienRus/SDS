@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.RequestFileDto;
+import backend.application.interfaces.out.repository.IRequestFileRepository;
 
 @Stateless
-public class RequestFileRepository {
+public class RequestFileRepository implements IRequestFileRepository {
     @PersistenceContext
     private EntityManager entityManager;
 

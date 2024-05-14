@@ -1,22 +1,22 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.position.Position;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Position}
- */
 public class PositionDto implements Serializable {
-    private final Long id;
-    private final String itemName;
-    private final Integer priceForOne;
-    private final Integer count;
-    private final String unitName;
-    private final SupplierDto winner;
+    private Long id;
+    private String itemName;
+    private Integer priceForOne;
+    private Integer count;
+    private String unitName;
+    private SupplierDto winner;
 
-    public PositionDto(Long id, String itemName, Integer priceForOne, Integer count, String unitName, SupplierDto winner) {
+    public PositionDto() {
+        
+    }
+
+    public PositionDto(Long id, String itemName, Integer priceForOne, Integer count, String unitName,
+            SupplierDto winner) {
         this.id = id;
         this.itemName = itemName;
         this.priceForOne = priceForOne;
@@ -76,5 +76,29 @@ public class PositionDto implements Serializable {
                 "priceForOne = " + priceForOne + ", " +
                 "count = " + count + ", " +
                 "unitName = " + unitName + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setPriceForOne(Integer priceForOne) {
+        this.priceForOne = priceForOne;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
+    public void setWinner(SupplierDto winner) {
+        this.winner = winner;
     }
 }

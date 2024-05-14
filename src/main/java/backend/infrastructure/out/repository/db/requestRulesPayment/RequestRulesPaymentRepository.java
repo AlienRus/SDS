@@ -6,11 +6,12 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import backend.infrastructure.out.repository.db.requestRule.RequestRule;
+import backend.application.dto.RequestRuleDto;
 import backend.application.dto.RequestRulesPaymentDto;
+import backend.application.interfaces.out.repository.IRequestRulesPaymentRepository;
 
 @Stateless
-public class RequestRulesPaymentRepository {
+public class RequestRulesPaymentRepository implements IRequestRulesPaymentRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -24,12 +25,12 @@ public class RequestRulesPaymentRepository {
         return RequestRulesPaymentMapper.toDto(requestRulesPayment);
     }
 
-    public List<RequestRulesPaymentDto> getRequestRulesPaymentsByRequestRule(RequestRule requestRule) {
+    public List<RequestRulesPaymentDto> getRequestRulesPaymentsByRequestRule(RequestRuleDto requestRuleDTO) {
         List<RequestRulesPayment> requestRulesPayments = entityManager
                 .createQuery(
-                        "SELECT requestRulesPayment FROM RequestRulesPayment requestRulesPayment WHERE requestRulesPayment.requestRule = :requestRule",
+                        "SELECT requestRulesPayment FROM RequestRulesPayment requestRulesPayment WHERE requestRulesPayment.requestRules.id=:id",
                         RequestRulesPayment.class)
-                .setParameter("requestRule", requestRule)
+                .setParameter("id", requestRuleDTO.getId())
                 .getResultList();
         return requestRulesPayments.stream()
                 .map(RequestRulesPaymentMapper::toDto)

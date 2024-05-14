@@ -13,15 +13,16 @@ import jakarta.validation.constraints.NotNull;
 public class PositionRequest {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false , cascade = CascadeType.ALL)
     @JoinColumn(name = "request_id", nullable = false)
     private Request request;
 

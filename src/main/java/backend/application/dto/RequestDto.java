@@ -1,20 +1,28 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.request.Request;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link Request}
- */
 public class RequestDto implements Serializable {
-    private final Long id;
-    private final Integer priceForOne;
-    private final Integer count;
-    private final String itemName;
-    private final Integer deliveryTime;
-    private final SupplierDto supplier;
+    private Long id;
+    private Integer priceForOne;
+    private Integer count;
+    private String itemName;
+    private Integer deliveryTime;
+    private SupplierDto supplier;
+
+    public RequestDto() {
+
+    }
+
+    public RequestDto(Integer priceForOne, Integer count, String itemName, Integer deliveryTime,
+            SupplierDto supplier) {
+        this.priceForOne = priceForOne;
+        this.count = count;
+        this.itemName = itemName;
+        this.deliveryTime = deliveryTime;
+        this.supplier = supplier;
+    }
 
     public RequestDto(Long id, Integer priceForOne, Integer count, String itemName, Integer deliveryTime,
             SupplierDto supplier) {
@@ -79,5 +87,29 @@ public class RequestDto implements Serializable {
                 "itemName = " + itemName + ", " +
                 "deliveryTime = " + deliveryTime + ", " +
                 "supplier = " + supplier + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPriceForOne(Integer priceForOne) {
+        this.priceForOne = priceForOne;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setDeliveryTime(Integer deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
     }
 }

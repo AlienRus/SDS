@@ -32,8 +32,8 @@ public class Position {
     @Column(name = "unit_name", nullable = false, length = 16)
     private String unitName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "winner")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "winner", nullable = true)
     private Supplier winner;
 
     public Long getId() {

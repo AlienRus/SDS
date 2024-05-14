@@ -1,18 +1,17 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.requestRulesPayment.RequestRulesPayment;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link RequestRulesPayment}
- */
 public class RequestRulesPaymentDto implements Serializable {
-    private final Long id;
-    private final RequestRuleDto requestRules;
-    private final PaymentMethodDto paymentMethod;
-    private final Integer paymentValue;
+    private Long id;
+    private RequestRuleDto requestRules;
+    private PaymentMethodDto paymentMethod;
+    private Integer paymentValue;
+
+    public RequestRulesPaymentDto() {
+
+    }
 
     public RequestRulesPaymentDto(Long id, RequestRuleDto requestRules, PaymentMethodDto paymentMethod,
             Integer paymentValue) {
@@ -63,5 +62,21 @@ public class RequestRulesPaymentDto implements Serializable {
                 "requestRules = " + requestRules + ", " +
                 "paymentMethod = " + paymentMethod + ", " +
                 "paymentValue = " + paymentValue + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRequestRules(RequestRuleDto requestRules) {
+        this.requestRules = requestRules;
+    }
+
+    public void setPaymentMethod(PaymentMethodDto paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setPaymentValue(Integer paymentValue) {
+        this.paymentValue = paymentValue;
     }
 }

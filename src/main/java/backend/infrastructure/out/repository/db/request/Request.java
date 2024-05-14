@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 public class Request {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull

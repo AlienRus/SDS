@@ -1,17 +1,16 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.requestRulesShippingMethod.RequestRulesShippingMethod;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link RequestRulesShippingMethod}
- */
 public class RequestRulesShippingMethodDto implements Serializable {
-    private final Long id;
-    private final RequestRuleDto requestRules;
-    private final ShippingMethodDto shippingMethod;
+    private Long id;
+    private RequestRuleDto requestRules;
+    private ShippingMethodDto shippingMethod;
+
+    public RequestRulesShippingMethodDto() {
+
+    }
 
     public RequestRulesShippingMethodDto(Long id, RequestRuleDto requestRules, ShippingMethodDto shippingMethod) {
         this.id = id;
@@ -54,5 +53,17 @@ public class RequestRulesShippingMethodDto implements Serializable {
                 "id = " + id + ", " +
                 "requestRules = " + requestRules + ", " +
                 "shippingMethod = " + shippingMethod + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRequestRules(RequestRuleDto requestRules) {
+        this.requestRules = requestRules;
+    }
+
+    public void setShippingMethod(ShippingMethodDto shippingMethod) {
+        this.shippingMethod = shippingMethod;
     }
 }

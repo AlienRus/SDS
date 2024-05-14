@@ -1,17 +1,16 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.lotPosition.LotPosition;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link LotPosition}
- */
 public class LotPositionDto implements Serializable {
-    private final Long id;
-    private final LotDto lot;
-    private final PositionDto position;
+    private Long id;
+    private LotDto lot;
+    private PositionDto position;
+
+    public LotPositionDto() {
+
+    }
 
     public LotPositionDto(Long id, LotDto lot, PositionDto position) {
         this.id = id;
@@ -54,5 +53,17 @@ public class LotPositionDto implements Serializable {
                 "id = " + id + ", " +
                 "lot = " + lot + ", " +
                 "position = " + position + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
+    }
+
+    public void setPosition(PositionDto position) {
+        this.position = position;
     }
 }

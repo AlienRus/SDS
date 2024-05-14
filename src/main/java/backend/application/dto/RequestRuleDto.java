@@ -1,18 +1,17 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.requestRule.RequestRule;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link RequestRule}
- */
 public class RequestRuleDto implements Serializable {
-    private final Long id;
-    private final LotDto lot;
-    private final SupplierDto supplier;
-    private final String comment;
+    private Long id;
+    private LotDto lot;
+    private SupplierDto supplier;
+    private String comment;
+
+    public RequestRuleDto() {
+        
+    }
 
     public RequestRuleDto(Long id, LotDto lot, SupplierDto supplier, String comment) {
         this.id = id;
@@ -62,5 +61,21 @@ public class RequestRuleDto implements Serializable {
                 "lot = " + lot + ", " +
                 "supplier = " + supplier + ", " +
                 "comment = " + comment + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
+    }
+
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

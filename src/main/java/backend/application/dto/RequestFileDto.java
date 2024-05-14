@@ -3,15 +3,15 @@ package backend.application.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for
- * {@link backend.infrastructure.out.repository.db.requestFile.RequestFile}
- */
 public class RequestFileDto implements Serializable {
-    private final Long id;
-    private final LotDto lot;
-    private final SupplierDto supplier;
-    private final String path;
+    private Long id;
+    private LotDto lot;
+    private SupplierDto supplier;
+    private String path;
+
+    public RequestFileDto() {
+
+    }
 
     public RequestFileDto(Long id, LotDto lot, SupplierDto supplier, String path) {
         this.id = id;
@@ -61,5 +61,21 @@ public class RequestFileDto implements Serializable {
                 "lot = " + lot + ", " +
                 "supplier = " + supplier + ", " +
                 "path = " + path + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
+    }
+
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

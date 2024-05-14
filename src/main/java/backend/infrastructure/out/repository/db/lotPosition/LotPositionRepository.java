@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.LotPositionDto;
+import backend.application.interfaces.out.repository.ILotPositionRepository;
 
 @Stateless
-public class LotPositionRepository {
+public class LotPositionRepository implements ILotPositionRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -25,7 +26,7 @@ public class LotPositionRepository {
 
     public List<LotPositionDto> getLotPositionByLotId(Long lotId) {
         List<LotPosition> lotPositions = entityManager
-                .createQuery("SELECT lotPosition FROM LotPosition lotPosition WHERE lotPosition.lot_id=:id",
+                .createQuery("SELECT lotPosition FROM LotPosition lotPosition WHERE lotPosition.lot.id=:id",
                         LotPosition.class)
                 .setParameter("id", lotId)
                 .getResultList();

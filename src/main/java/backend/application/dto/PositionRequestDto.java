@@ -1,17 +1,21 @@
 package backend.application.dto;
 
-import backend.infrastructure.out.repository.db.positionRequest.PositionRequest;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link PositionRequest}
- */
 public class PositionRequestDto implements Serializable {
-    private final Long id;
-    private final PositionDto position;
-    private final RequestDto request;
+    private Long id;
+    private PositionDto position;
+    private RequestDto request;
+
+    public PositionRequestDto() {
+
+    }
+
+    public PositionRequestDto(PositionDto position, RequestDto request) {
+        this.position = position;
+        this.request = request;
+    }
 
     public PositionRequestDto(Long id, PositionDto position, RequestDto request) {
         this.id = id;
@@ -54,5 +58,17 @@ public class PositionRequestDto implements Serializable {
                 "id = " + id + ", " +
                 "position = " + position + ", " +
                 "request = " + request + ")";
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPosition(PositionDto position) {
+        this.position = position;
+    }
+
+    public void setRequest(RequestDto request) {
+        this.request = request;
     }
 }

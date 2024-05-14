@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.RequestRuleDto;
+import backend.application.interfaces.out.repository.IRequestRuleRepository;
 
 @Stateless
-public class RequestRuleRepository {
+public class RequestRuleRepository implements IRequestRuleRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -28,6 +29,19 @@ public class RequestRuleRepository {
                 .createQuery("SELECT requestRule FROM RequestRule requestRule WHERE requestRule.lot.id = :lotId",
                         RequestRule.class)
                 .setParameter("lotId", lotId)
+                .getResultList();
+        return requestRules.stream()
+                .map(RequestRuleMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<RequestRuleDto> getRequestRulesByLotIdAndSupplierId(Long lotId, Long supplierId) {
+        List<RequestRule> requestRules = entityManager
+                .createQuery(
+                        "SELECT requestRule FROM RequestRule requestRule WHERE requestRule.lot.id=:lotId AND requestRule.supplier.id=:supplierId",
+                        RequestRule.class)
+                .setParameter("lotId", lotId)
+                .setParameter("supplierId", supplierId)
                 .getResultList();
         return requestRules.stream()
                 .map(RequestRuleMapper::toDto)

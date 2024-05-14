@@ -22,6 +22,7 @@ public class PositionMapper {
         position.setPriceForOne(positionDto.getPriceForOne());
         position.setCount(positionDto.getCount());
         position.setUnitName(positionDto.getUnitName());
+        
         position.setWinner(SupplierMapper.toEntity(positionDto.getWinner()));
         return position;
     }

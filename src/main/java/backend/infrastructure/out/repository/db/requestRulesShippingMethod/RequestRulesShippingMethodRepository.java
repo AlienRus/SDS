@@ -6,11 +6,12 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import backend.infrastructure.out.repository.db.requestRule.RequestRule;
+import backend.application.dto.RequestRuleDto;
 import backend.application.dto.RequestRulesShippingMethodDto;
+import backend.application.interfaces.out.repository.IRequestRulesShippingMethodRepository;
 
 @Stateless
-public class RequestRulesShippingMethodRepository {
+public class RequestRulesShippingMethodRepository implements IRequestRulesShippingMethodRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -21,16 +22,18 @@ public class RequestRulesShippingMethodRepository {
     }
 
     public RequestRulesShippingMethodDto getRequestRulesShippingMethodById(Long id) {
-        RequestRulesShippingMethod requestRulesShippingMethod = entityManager.find(RequestRulesShippingMethod.class,
+        RequestRulesShippingMethod requestRulesShippingMethod = entityManager.find(
+                RequestRulesShippingMethod.class,
                 id);
         return RequestRulesShippingMethodMapper.toDto(requestRulesShippingMethod);
     }
 
-    public List<RequestRulesShippingMethodDto> getRequestRulesShippingMethodsByRequestRule(RequestRule requestRule) {
+    public List<RequestRulesShippingMethodDto> getRequestRulesShippingMethodsByRequestRule(
+            RequestRuleDto requestRuleDTO) {
         List<RequestRulesShippingMethod> requestRulesShippingMethods = entityManager.createQuery(
-                "SELECT requestRulesShippingMethod FROM RequestRulesShippingMethod requestRulesShippingMethod WHERE requestRulesShippingMethod.requestRule = :requestRule",
+                "SELECT requestRulesShippingMethod FROM RequestRulesShippingMethod requestRulesShippingMethod WHERE requestRulesShippingMethod.requestRules.id=:id",
                 RequestRulesShippingMethod.class)
-                .setParameter("requestRule", requestRule)
+                .setParameter("id", requestRuleDTO.getId())
                 .getResultList();
         return requestRulesShippingMethods.stream()
                 .map(RequestRulesShippingMethodMapper::toDto)

@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import backend.application.dto.PositionDto;
+import backend.application.interfaces.out.repository.IPositionRepository;
 
 @Stateless
-public class PositionRepository {
+public class PositionRepository implements IPositionRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
