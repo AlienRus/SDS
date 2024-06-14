@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Size;
 public class Supplier {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -23,7 +24,7 @@ public class Supplier {
 
     @Size(max = 128)
     @NotNull
-    @Column(name = "email", nullable = false, length = 128)
+    @Column(name = "email", nullable = false, length = 128, unique = true)
     private String email;
 
     @Size(max = 64)

@@ -11,6 +11,8 @@ public interface ISupplySpecialistRepository {
 
     List<SupplySpecialistDto> getAllSupplySpecialists();
 
+    SupplySpecialistDto getSupplySpecialistByEmailAndPassword(String email, String password);
+
     void updateSupplySpecialist(SupplySpecialistDto supplySpecialistDto);
 
     void deleteSupplySpecialist(SupplySpecialistDto supplySpecialistDto);

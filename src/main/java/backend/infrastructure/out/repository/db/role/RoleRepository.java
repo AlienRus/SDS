@@ -38,4 +38,13 @@ public class RoleRepository implements IRoleRepository {
         Role role = RoleMapper.toEntity(roleDto);
         entityManager.remove(entityManager.contains(role) ? role : entityManager.merge(role));
     }
+
+    @Override
+    public RoleDto getRoleByName(String name) {
+        Role role = entityManager.createQuery("SELECT role FROM Role role WHERE role.roleName=:name", Role.class)
+                .setParameter("name", name)
+                .getSingleResult();
+
+        return RoleMapper.toDto(role);
+    }
 }

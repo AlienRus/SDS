@@ -9,6 +9,7 @@ import backend.application.interfaces.in.IGroupEtService;
 import backend.application.interfaces.in.IGroupEtsSignerService;
 import backend.infrastructure.builder.Built;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
+import backend.infrastructure.in.rest.request.put.group.UpdateGroupEt;
 import backend.infrastructure.out.response.GroupResponse;
 import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
@@ -45,12 +46,7 @@ public class Groups {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @TokenRequired
     public Response getGroups() {
-        String error = requestContext.getProperty("checkToken").toString();
-        if (error.equals("false")) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
 
         try {
             List<GroupEtDto> groups = groupEtService.getAllGroupEts();
@@ -58,7 +54,8 @@ public class Groups {
             List<GroupResponse> responses = new ArrayList<GroupResponse>();
 
             for (GroupEtDto group : groups) {
-                List<GroupEtsSignerDto> signers = groupEtsSignerService.getAllGroupEtsSignersByGroupEtsId(group.getId());
+                List<GroupEtsSignerDto> signers = groupEtsSignerService
+                        .getAllGroupEtsSignersByGroupEtsId(group.getId());
 
                 responses.add(new GroupResponse(group, signers));
             }
@@ -95,16 +92,40 @@ public class Groups {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @TokenRequired
-    public Response updateGroup(String requestBody) {
+    @Path("/{groupId}")
+    public Response updateGroup(@PathParam("groupId") Long groupId, String groupData) {
         String error = requestContext.getProperty("checkToken").toString();
         if (error.equals("false")) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         try {
-            GroupEtDto group = jsonb.fromJson(requestBody, GroupEtDto.class);
-            groupEtService.updateGroupEt(group);
-            return Response.status(201).build();
+            GroupEtDto groupEtDto = groupEtService.getGroupEtById(groupId);
+
+            UpdateGroupEt updateGroupEt = jsonb.fromJson(groupData, UpdateGroupEt.class);
+
+            if (updateGroupEt.getManagerFirstName() != null) {
+                groupEtDto.setManagerFirstName(updateGroupEt.getManagerFirstName());
+            }
+
+            if (updateGroupEt.getManagerLastName() != null) {
+                groupEtDto.setManagerLastName(updateGroupEt.getManagerLastName());
+            }
+
+            if (updateGroupEt.getManagerMiddleName() != null) {
+                groupEtDto.setManagerMiddleName(updateGroupEt.getManagerMiddleName());
+            }
+
+            if (updateGroupEt.getManagerPost() != null) {
+                groupEtDto.setManagerPost(updateGroupEt.getManagerPost());
+            }
+
+            if (updateGroupEt.getName() != null) {
+                groupEtDto.setName(updateGroupEt.getName());
+            }
+
+            groupEtService.updateGroupEt(groupEtDto);
+            return Response.ok().build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {

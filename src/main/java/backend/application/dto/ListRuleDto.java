@@ -1,14 +1,24 @@
 package backend.application.dto;
 
 public class ListRuleDto {
+    private Long supplierId;
     private String comment;
     private ListRulePaymentDto payment;
     private String shippingMethod;
 
-    public ListRuleDto(String comment, ListRulePaymentDto payment, String shippingMethod) {
+    public ListRuleDto(Long supplierId, String comment, ListRulePaymentDto payment, String shippingMethod) {
+        this.supplierId = supplierId;
         this.comment = comment;
         this.payment = payment;
         this.shippingMethod = shippingMethod;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getComment() {
@@ -37,6 +47,8 @@ public class ListRuleDto {
 
     @Override
     public String toString() {
-        return "ListRuleDto [comment=" + comment + ", payment=" + payment + ", shippingMethod=" + shippingMethod + "]";
+        return "ListRuleDto [supplierId=" + supplierId + ", comment=" + comment + ", payment=" + payment
+                + ", shippingMethod=" + shippingMethod + "]";
     }
+
 }

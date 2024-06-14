@@ -39,4 +39,9 @@ public class SupplySpecialistService implements ISupplySpecialistService {
     public void deleteSupplySpecialist(SupplySpecialistDto supplySpecialistDto) {
         supplySpecialistRepository.deleteSupplySpecialist(supplySpecialistDto);
     }
+
+    @Override
+    public SupplySpecialistDto getSupplySpecialistByEmailAndPassword(String email, String password) {
+        return supplySpecialistRepository.getSupplySpecialistByEmailAndPassword(email, password);
+    }
 }

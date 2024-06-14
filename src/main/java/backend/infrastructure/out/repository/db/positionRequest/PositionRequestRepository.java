@@ -21,7 +21,6 @@ public class PositionRequestRepository implements IPositionRequestRepository {
     private EntityManager entityManager;
 
     public void createPositionRequest(PositionRequestDto positionRequestDto) {
-        Logger.getLogger(PositionRequestRepository.class.getName()).log(Level.WARNING, positionRequestDto.toString());
         PositionRequest positionRequest = PositionRequestMapper.toEntity(positionRequestDto);
         entityManager.persist(positionRequest);
     }

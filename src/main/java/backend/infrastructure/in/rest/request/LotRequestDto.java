@@ -1,6 +1,9 @@
 package backend.infrastructure.in.rest.request;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import backend.application.dto.PositionDto;
 
 public class LotRequestDto {
     private Long id;
@@ -12,11 +15,12 @@ public class LotRequestDto {
     private Long lotCreatorId;
     private Long groupEtsId;
     private LotRuleRequestDto rules;
-    private LotFileRequestDto lotFiles;
+    private String filePath;
+    private List<PositionDto> positions;
 
     public LotRequestDto(Long id, String name, LocalDate openDate, LocalDate closeDate, Long statusId,
-            boolean canOwnWay, Long lotCreatorId, Long groupEtsId, LotRuleRequestDto rules,
-            LotFileRequestDto lotFiles) {
+            boolean canOwnWay, Long lotCreatorId, Long groupEtsId, LotRuleRequestDto rules, String filePath,
+            List<PositionDto> positions) {
         this.id = id;
         this.name = name;
         this.openDate = openDate;
@@ -26,7 +30,8 @@ public class LotRequestDto {
         this.lotCreatorId = lotCreatorId;
         this.groupEtsId = groupEtsId;
         this.rules = rules;
-        this.lotFiles = lotFiles;
+        this.filePath = filePath;
+        this.positions = positions;
     }
 
     public LotRequestDto() {
@@ -104,19 +109,28 @@ public class LotRequestDto {
         this.rules = rules;
     }
 
-    public LotFileRequestDto getLotFiles() {
-        return lotFiles;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setLotFiles(LotFileRequestDto lotFiles) {
-        this.lotFiles = lotFiles;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public List<PositionDto> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<PositionDto> positions) {
+        this.positions = positions;
     }
 
     @Override
     public String toString() {
         return "LotRequestDto [id=" + id + ", name=" + name + ", openDate=" + openDate + ", closeDate=" + closeDate
                 + ", statusId=" + statusId + ", canOwnWay=" + canOwnWay + ", lotCreatorId=" + lotCreatorId
-                + ", groupEtsId=" + groupEtsId + ", rules=" + rules + ", lotFiles=" + lotFiles + "]";
+                + ", groupEtsId=" + groupEtsId + ", rules=" + rules + ", filePath=" + filePath + ", positions="
+                + positions + "]";
     }
 
 }

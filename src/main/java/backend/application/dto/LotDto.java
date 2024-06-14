@@ -14,13 +14,27 @@ public class LotDto implements Serializable {
     private SupplySpecialistDto lotCreator;
     private LotRuleDto rules;
     private GroupEtDto groupEts;
+    private String filePath;
 
     public LotDto() {
 
     }
 
+    public LotDto(String name, LocalDate openDate, LocalDate closeDate, StatusDto status, Boolean canOwnWay,
+            SupplySpecialistDto lotCreator, LotRuleDto rules, GroupEtDto groupEts, String filePath) {
+        this.name = name;
+        this.openDate = openDate;
+        this.closeDate = closeDate;
+        this.status = status;
+        this.canOwnWay = canOwnWay;
+        this.lotCreator = lotCreator;
+        this.rules = rules;
+        this.groupEts = groupEts;
+        this.filePath = filePath;
+    }
+
     public LotDto(Long id, String name, LocalDate openDate, LocalDate closeDate, StatusDto status, Boolean canOwnWay,
-            SupplySpecialistDto lotCreator, LotRuleDto rules, GroupEtDto groupEts) {
+            SupplySpecialistDto lotCreator, LotRuleDto rules, GroupEtDto groupEts, String filePath) {
         this.id = id;
         this.name = name;
         this.openDate = openDate;
@@ -30,6 +44,15 @@ public class LotDto implements Serializable {
         this.lotCreator = lotCreator;
         this.rules = rules;
         this.groupEts = groupEts;
+        this.filePath = filePath;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public Long getId() {

@@ -11,6 +11,10 @@ public interface ISupplierRepository {
 
     List<SupplierDto> getAllSuppliers();
 
+    SupplierDto getSupplierByEmailAndPassword(String email, String password);
+
+    SupplierDto getSupplierByEmail(String email);
+
     void updateSupplier(SupplierDto supplierDto);
 
     void deleteSupplier(SupplierDto supplierDto);

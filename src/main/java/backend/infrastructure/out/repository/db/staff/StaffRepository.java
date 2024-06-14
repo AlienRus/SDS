@@ -45,4 +45,19 @@ public class StaffRepository implements IStaffRepository {
         Staff staff = StaffMapper.toEntity(staffDto);
         entityManager.remove(entityManager.contains(staff) ? staff : entityManager.merge(staff));
     }
+
+    @Override
+    public StaffDto getStaffByEmailAndPassword(String email, String password) {
+        List<Staff> staff = entityManager
+                .createQuery("SELECT s FROM Staff s WHERE s.email=:email AND s.password=:password", Staff.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getResultList();
+
+        if (staff.isEmpty()) {
+            return null;
+        }
+        
+        return StaffMapper.toDto(staff.get(0));
+    }
 }

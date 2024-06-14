@@ -25,6 +25,26 @@ public class SupplierDto implements Serializable {
 
     }
 
+    public SupplierDto(RoleDto role, String email, String password, TypeOfBusinessDto typeOfBusiness, String company,
+            String firstName, String middleName, String lastName, String phoneNumber, String regionOrAddress,
+            Boolean nds, String site, Long inn, Long kpp, Boolean isApproved) {
+        this.role = role;
+        this.email = email;
+        this.password = password;
+        this.typeOfBusiness = typeOfBusiness;
+        this.company = company;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.regionOrAddress = regionOrAddress;
+        this.nds = nds;
+        this.site = site;
+        this.inn = inn;
+        this.kpp = kpp;
+        this.isApproved = isApproved;
+    }
+
     public SupplierDto(Long id, RoleDto role, String email, String password, TypeOfBusinessDto typeOfBusiness,
             String company, String firstName, String middleName, String lastName, String phoneNumber,
             String regionOrAddress, Boolean nds, String site, Long inn, Long kpp, Boolean isApproved) {

@@ -13,6 +13,12 @@ public class RequestFileDto implements Serializable {
 
     }
 
+    public RequestFileDto(LotDto lot, SupplierDto supplier, String path) {
+        this.lot = lot;
+        this.supplier = supplier;
+        this.path = path;
+    }
+
     public RequestFileDto(Long id, LotDto lot, SupplierDto supplier, String path) {
         this.id = id;
         this.lot = lot;

@@ -17,6 +17,8 @@ public interface ILotService {
 
     void createLotWithData(LotDto lotDto, int lotCreatorId, int statusId, int groupEtsId);
 
+    Long getLatestLotId();
+
     LotDto getLotById(Long id);
 
     List<LotDto> getAllLots();

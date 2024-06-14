@@ -4,14 +4,16 @@ public class LotRuleRequestDto {
     private Long shippingMethodId;
     private Long paymentMethodId;
     private String comment;
+    private Integer paymentValue;
 
-    public LotRuleRequestDto(Long shippingMethodId, Long paymentMethodId, String comment) {
+    public LotRuleRequestDto() {
+    }
+
+    public LotRuleRequestDto(Long shippingMethodId, Long paymentMethodId, String comment, Integer paymentValue) {
         this.shippingMethodId = shippingMethodId;
         this.paymentMethodId = paymentMethodId;
         this.comment = comment;
-    }
-
-    public LotRuleRequestDto() {
+        this.paymentValue = paymentValue;
     }
 
     public Long getShippingMethodId() {
@@ -38,10 +40,12 @@ public class LotRuleRequestDto {
         this.comment = comment;
     }
 
-    @Override
-    public String toString() {
-        return "LotRuleRequestDto [shippingMethodId=" + shippingMethodId + ", paymentMethodId=" + paymentMethodId
-                + ", comment=" + comment + "]";
+    public Integer getPaymentValue() {
+        return paymentValue;
+    }
+
+    public void setPaymentValue(Integer paymentValue) {
+        this.paymentValue = paymentValue;
     }
 
 }

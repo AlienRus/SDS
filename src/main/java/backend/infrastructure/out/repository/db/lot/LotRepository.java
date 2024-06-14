@@ -48,4 +48,11 @@ public class LotRepository implements ILotRepository {
         Lot lot = LotMapper.toEntity(lotDto);
         entityManager.remove(entityManager.contains(lot) ? lot : entityManager.merge(lot));
     }
+
+    @Override
+    public Long getLatestLotId() {
+        Long latestLotId = (Long) entityManager.createQuery("SELECT MAX(lot.id) FROM Lot lot")
+                .getSingleResult();
+        return latestLotId != null ? latestLotId : 0L; // если база данных пуста, возвращаем 0
+    }
 }

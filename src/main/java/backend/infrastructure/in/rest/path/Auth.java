@@ -1,124 +1,178 @@
-// package backend.infrastructure.in.rest.path;
+package backend.infrastructure.in.rest.path;
 
-// import java.util.HashMap;
-// import java.util.Map;
+import backend.application.dto.RoleDto;
+import backend.application.dto.StaffDto;
+import backend.application.dto.SupplierDto;
+import backend.application.dto.SupplySpecialistDto;
+import backend.application.dto.TypeOfBusinessDto;
+import backend.application.interfaces.in.IGroupEtService;
+import backend.application.interfaces.in.IRoleService;
+import backend.application.interfaces.in.IStaffService;
+import backend.application.interfaces.in.ISupplierService;
+import backend.application.interfaces.in.ISupplySpecialistService;
+import backend.application.interfaces.in.ITypeOfBusinessService;
+import backend.infrastructure.builder.Built;
+import backend.infrastructure.in.rest.request.AuthUserRequestDto;
+import backend.infrastructure.in.rest.request.NewUserRequestDto;
+import backend.infrastructure.in.rest.token.ITokenManager;
+import backend.infrastructure.out.response.AuthUserResponse;
+import jakarta.inject.Inject;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
 
-// import backend.application.implementation.authentication.User;
-// import backend.application.interfaces.in.authentication.IAuthorizer;
-// import backend.application.interfaces.in.registration.IRegistrator;
-// // import backend.application.interfaces.out.messaging.Interconnectable;
-// import backend.infrastructure.builder.Built;
-// import backend.infrastructure.in.rest.token.ITokenManager;
-// import jakarta.inject.Inject;
-// import jakarta.json.bind.Jsonb;
-// import jakarta.json.bind.JsonbBuilder;
-// import jakarta.json.bind.JsonbException;
-// import jakarta.ws.rs.Consumes;
-// import jakarta.ws.rs.POST;
-// import jakarta.ws.rs.Path;
-// import jakarta.ws.rs.Produces;
-// import jakarta.ws.rs.container.ContainerRequestContext;
-// import jakarta.ws.rs.core.Context;
-// import jakarta.ws.rs.core.Response;
+@Path("/auth")
+public class Auth {
 
-// @Path("/auth")
-// public class Auth {
-//     // application begin
-//     @Inject
-//     @Built
-//     private IAuthorizer authorizer;
+    @Inject
+    private ITokenManager tokenManager;
 
-//     @Inject
-//     @Built
-//     private IRegistrator registrator;
+    @Context
+    private ContainerRequestContext requestContext;
 
-//     @Inject
-//     private ITokenManager tokenManager;
+    @Inject
+    @Built
+    private ISupplierService supplierService;
 
-//     @Context
-//     private ContainerRequestContext requestContext;
+    @Inject
+    @Built
+    private ISupplySpecialistService supplySpecialistService;
 
-//     // @Inject
-//     // private Interconnectable interconnector;
+    @Inject
+    @Built
+    private IGroupEtService groupEtService;
 
-//     @POST
-//     @Path("/login")
-//     @Consumes("application/json")
-//     @Produces("application/json")
-//     public Response auth(String loginPasswordJSON) {
-//         Jsonb jsonb = JsonbBuilder.create();
-//         User user;
-//         String token;
-//         String resultJSON;
-//         String userRole = "";
+    @Inject
+    @Built
+    private IRoleService roleService;
 
-//         try {
-//             try {
-//                 user = jsonb.fromJson(loginPasswordJSON, User.class);
-//                 token = requestContext.getHeaderString("Token");
-//                 if (token == null || token.equals("") || token.equals("undefined")
-//                         || token.length() != ITokenManager.TOKEN_LENGTH) { // if user doesnt have token
-//                     if (!authorizer.authorize(user)) { // if invalid login/password
-//                         return Response.status(Response.Status.UNAUTHORIZED).build();
-//                     }
+    @Inject
+    @Built
+    private ITypeOfBusinessService typeOfBusinessService;
 
-//                     userRole = authorizer.getUserRole(user);
-//                     if (userRole == null || userRole.equals("")) {
-//                         return Response.status(Response.Status.UNAUTHORIZED).build();
-//                     }
+    @Inject
+    @Built
+    private IStaffService staffService;
 
-//                     // authorized
-//                     token = tokenManager.generateToken(user.getLogin(), userRole);
+    private Jsonb jsonb = JsonbBuilder.create();
 
-//                 } else {
-//                     // user has token
-//                     // check if token is correct
-//                     if (!tokenManager.checkToken(token)) { // if invalid token
-//                         return Response.status(Response.Status.UNAUTHORIZED).build();
-//                     }
-//                 }
-//             } catch (Exception e) {
-//                 return Response.status(Response.Status.UNAUTHORIZED).build();
-//             }
+    @POST
+    @Path("/login")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response auth(String userDataJSON) {
+        try {
 
-//             Map<String, String> tokenAndRole = new HashMap<>();
-//             tokenAndRole.put("token", token);
-//             tokenAndRole.put("role", userRole);
+            AuthUserRequestDto authUserRequestDto = jsonb.fromJson(userDataJSON, AuthUserRequestDto.class);
+            String email = authUserRequestDto.getEmail();
+            String password = authUserRequestDto.getPassword();
 
-//             resultJSON = jsonb.toJson(tokenAndRole);
+            // Проверка пользователя в сервисах
+            SupplierDto supplier = supplierService.getSupplierByEmailAndPassword(email, password);
+            SupplySpecialistDto supplySpecialist = supplySpecialistService.getSupplySpecialistByEmailAndPassword(email,
+                    password);
+            StaffDto staff = staffService.getStaffByEmailAndPassword(email, password);
 
-//         } catch (JsonbException e) {
-//             return Response.status(Response.Status.UNAUTHORIZED).build();
-//         } catch (Exception e) {
-//             return Response.status(Response.Status.BAD_REQUEST).build();
-//         }
-//         return Response.ok(resultJSON).build(); // send token
-//     }
+            // Если пользователь не найден ни в одном из сервисов, 401
+            if (supplier == null && supplySpecialist == null && staff == null) {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
 
-//     @POST
-//     @Path("/reg")
-//     @Consumes("application/json")
-//     @Produces("application/json")
-//     public Response register(String loginPasswordJSON) {
-//         Jsonb jsonb = JsonbBuilder.create();
-//         User user;
+            // Если пользователь найден в supplierService
+            if (supplier != null) {
+                String token = tokenManager.generateToken(email, "supplier");
+                return Response.ok(new AuthUserResponse(token, email, "supplier", supplier.getId())).build();
+            }
 
-//         try {
-//             try {
-//                 user = jsonb.fromJson(loginPasswordJSON, User.class);
-//                 user.setRole("user");
-//             } catch (JsonbException e) {
-//                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//             }
+            // Если пользователь найден в supplySpecialistService
+            if (supplySpecialist != null) {
+                String token = tokenManager.generateToken(email, "supplySpecialist");
+                return Response.ok(new AuthUserResponse(token, email, "supplySpecialist", supplySpecialist.getId()))
+                        .build();
+            }
 
-//             if (!registrator.register(user)) {
-//                 return Response.status(Response.Status.BAD_REQUEST).build();
-//             }
-//         } catch (JsonbException e) {
-//             return Response.status(Response.Status.BAD_REQUEST).build();
-//         } catch (Exception e) {
-//             return Response.status(Response.Status.BAD_REQUEST).build();
-//         }
-//         return Response.ok().build();
-//     }
-// }
+            if (staff != null) {
+                String token = tokenManager.generateToken(email, staff.getRole().getRoleName());
+                return Response.ok(new AuthUserResponse(token, email, staff.getRole().getRoleName(), staff.getId()))
+                        .build();
+            }
+
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
+    }
+
+    @POST
+    @Path("/reg")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response register(String newUserJSON) {
+        try {
+            NewUserRequestDto newUserRequestDto = jsonb.fromJson(newUserJSON, NewUserRequestDto.class);
+
+            String role = newUserRequestDto.getRole();
+
+            if (role.equals("supplier")) {
+                RoleDto roleDto = roleService.getRoleByName("Supplier");
+                TypeOfBusinessDto typeOfBusinessDto = typeOfBusinessService
+                        .getTypeOfBusinessById(newUserRequestDto.getTypeOfBusinessId());
+                SupplierDto supplierDto = new SupplierDto(roleDto, newUserRequestDto.getEmail(),
+                        newUserRequestDto.getPassword(), typeOfBusinessDto, newUserRequestDto.getCompany(),
+                        newUserRequestDto.getFirstName(), newUserRequestDto.getMiddleName(),
+                        newUserRequestDto.getLastName(), newUserRequestDto.getPhoneNumber(),
+                        newUserRequestDto.getRegionOrAddress(), newUserRequestDto.getNds(), newUserRequestDto.getSite(),
+                        newUserRequestDto.getInn(), newUserRequestDto.getKpp(), false);
+
+                supplierService.createSupplier(supplierDto);
+
+                return Response.ok().build();
+
+            } else if (role.equals("supplySpecialist")) {
+                RoleDto roleDto = roleService.getRoleByName("Supply_specialist");
+
+                SupplySpecialistDto supplySpecialistDto = new SupplySpecialistDto(roleDto, newUserRequestDto.getEmail(),
+                        newUserRequestDto.getPassword(), newUserRequestDto.getCompany(), false);
+
+                supplySpecialistService.createSupplySpecialist(supplySpecialistDto);
+
+                return Response.ok().build();
+
+            } else if (role.equals("admin")) {
+                RoleDto roleDto = roleService.getRoleByName("Admin");
+
+                StaffDto staffDto = new StaffDto(newUserRequestDto.getEmail(), newUserRequestDto.getPassword(),
+                        roleDto);
+
+                staffService.createStaff(staffDto);
+
+                return Response.ok().build();
+
+            } else if (role.equals("securitySpecialist")) {
+                RoleDto roleDto = roleService.getRoleByName("Security_specialist");
+
+                StaffDto staffDto = new StaffDto(newUserRequestDto.getEmail(), newUserRequestDto.getPassword(),
+                        roleDto);
+
+                staffService.createStaff(staffDto);
+
+                return Response.ok().build();
+            }
+
+            return Response.status(400).build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
+    }
+}

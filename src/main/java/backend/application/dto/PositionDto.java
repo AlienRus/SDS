@@ -10,19 +10,29 @@ public class PositionDto implements Serializable {
     private Integer count;
     private String unitName;
     private SupplierDto winner;
+    private LotDto lot;
 
     public PositionDto() {
-        
+
+    }
+
+    public PositionDto(String itemName, Integer priceForOne, Integer count, String unitName, LotDto lot) {
+        this.itemName = itemName;
+        this.priceForOne = priceForOne;
+        this.count = count;
+        this.unitName = unitName;
+        this.lot = lot;
     }
 
     public PositionDto(Long id, String itemName, Integer priceForOne, Integer count, String unitName,
-            SupplierDto winner) {
+            SupplierDto winner, LotDto lot) {
         this.id = id;
         this.itemName = itemName;
         this.priceForOne = priceForOne;
         this.count = count;
         this.unitName = unitName;
         this.winner = winner;
+        this.lot = lot;
     }
 
     public Long getId() {
@@ -47,6 +57,14 @@ public class PositionDto implements Serializable {
 
     public SupplierDto getWinner() {
         return winner;
+    }
+
+    public LotDto getLot() {
+        return lot;
+    }
+
+    public void setLot(LotDto lot) {
+        this.lot = lot;
     }
 
     @Override

@@ -13,10 +13,11 @@ import jakarta.validation.constraints.NotNull;
 public class SupplierGroup {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 

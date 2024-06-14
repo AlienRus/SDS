@@ -27,7 +27,7 @@ public class SupplierByIdResponse {
         this.company = supplierDto.getCompany();
         this.firstName = supplierDto.getFirstName();
         this.lastName = supplierDto.getLastName();
-        this.middleName = supplierDto.getLastName();
+        this.middleName = supplierDto.getMiddleName();
         this.phoneNumber = supplierDto.getPhoneNumber();
         this.regionOrAddress = supplierDto.getRegionOrAddress();
         this.site = supplierDto.getSite();

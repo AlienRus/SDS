@@ -13,15 +13,16 @@ import jakarta.validation.constraints.NotNull;
 public class LotPosition {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "lot_id", nullable = false)
     private Lot lot;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
@@ -47,6 +48,11 @@ public class LotPosition {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    @Override
+    public String toString() {
+        return "LotPosition [id=" + id + ", lot=" + lot + ", position=" + position + "]";
     }
 
 }

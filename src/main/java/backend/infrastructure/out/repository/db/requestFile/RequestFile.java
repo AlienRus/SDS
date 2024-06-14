@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Size;
 public class RequestFile {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -61,6 +62,11 @@ public class RequestFile {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestFile [id=" + id + ", lot=" + lot + ", supplier=" + supplier + ", path=" + path + "]";
     }
 
 }

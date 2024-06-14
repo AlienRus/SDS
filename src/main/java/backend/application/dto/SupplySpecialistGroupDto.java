@@ -12,6 +12,11 @@ public class SupplySpecialistGroupDto implements Serializable {
 
     }
 
+    public SupplySpecialistGroupDto(SupplySpecialistDto supplySpecialist, GroupEtDto group) {
+        this.supplySpecialist = supplySpecialist;
+        this.group = group;
+    }
+
     public SupplySpecialistGroupDto(Long id, SupplySpecialistDto supplySpecialist, GroupEtDto group) {
         this.id = id;
         this.supplySpecialist = supplySpecialist;

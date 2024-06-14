@@ -20,6 +20,7 @@ import java.time.LocalDate;
 public class Lot {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 256)
@@ -58,6 +59,18 @@ public class Lot {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "group_ETS", nullable = false)
     private GroupEt groupEts;
+
+    @Size(max = 1024)
+    @Column(name = "file", nullable = true, length = 1024)
+    private String path;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public Long getId() {
         return id;

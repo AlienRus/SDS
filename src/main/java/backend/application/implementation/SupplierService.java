@@ -39,4 +39,14 @@ public class SupplierService implements ISupplierService {
     public void deleteSupplier(SupplierDto supplierDto) {
         supplierRepository.deleteSupplier(supplierDto);
     }
+
+    @Override
+    public SupplierDto getSupplierByEmailAndPassword(String email, String password) {
+        return supplierRepository.getSupplierByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public SupplierDto getSupplierByEmail(String email) {
+        return supplierRepository.getSupplierByEmail(email);
+    }
 }

@@ -10,7 +10,13 @@ public class StaffDto implements Serializable {
     private RoleDto role;
 
     public StaffDto() {
-        
+
+    }
+
+    public StaffDto(String email, String password, RoleDto role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public StaffDto(Long id, String email, String password, RoleDto role) {

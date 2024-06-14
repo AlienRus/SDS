@@ -12,8 +12,6 @@ import backend.application.interfaces.in.IPositionRequestService;
 import backend.application.interfaces.in.IPositionService;
 import backend.application.interfaces.in.IRequestFileService;
 import backend.application.interfaces.in.IRequestRuleService;
-import backend.application.interfaces.in.IRequestRulesPaymentService;
-import backend.application.interfaces.in.IRequestRulesShippingMethodService;
 import backend.application.interfaces.in.IRequestService;
 import backend.application.interfaces.in.IRoleService;
 import backend.application.interfaces.in.IShippingMethodService;
@@ -38,8 +36,6 @@ import backend.application.interfaces.out.repository.IPositionRequestRepository;
 import backend.application.interfaces.out.repository.IRequestFileRepository;
 import backend.application.interfaces.out.repository.IRequestRepository;
 import backend.application.interfaces.out.repository.IRequestRuleRepository;
-import backend.application.interfaces.out.repository.IRequestRulesPaymentRepository;
-import backend.application.interfaces.out.repository.IRequestRulesShippingMethodRepository;
 import backend.application.interfaces.out.repository.IRoleRepository;
 import backend.application.interfaces.out.repository.IShippingMethodRepository;
 import backend.application.interfaces.out.repository.IStaffRepository;
@@ -104,14 +100,6 @@ public class Builder {
     @Inject
     @Default
     private IRequestRuleRepository requestRuleRepository;
-
-    @Inject
-    @Default
-    private IRequestRulesPaymentRepository requestRulesPaymentRepository;
-
-    @Inject
-    @Default
-    private IRequestRulesShippingMethodRepository requestRulesShippingMethodRepository;
 
     @Inject
     @Default
@@ -207,14 +195,6 @@ public class Builder {
 
     @Inject
     @Default
-    private IRequestRulesPaymentService requestRulesPaymentService;
-
-    @Inject
-    @Default
-    private IRequestRulesShippingMethodService requestRulesShippingMethodService;
-
-    @Inject
-    @Default
     private IRoleService roleService;
 
     @Inject
@@ -265,7 +245,7 @@ public class Builder {
     @Built
     public IListService buildListService() {
         listService.InjectRepositories(lotPositionRepository, positionRequestRepository, requestFileRepository,
-                requestRuleRepository, requestRulesPaymentRepository, requestRulesShippingMethodRepository);
+                requestRuleRepository, lotFileRepository);
         return listService;
     }
 
@@ -351,21 +331,6 @@ public class Builder {
     public IRequestRuleService buildRequestRuleService() {
         requestRuleService.InjectRequestRuleRepository(requestRuleRepository);
         return requestRuleService;
-    }
-
-    @Produces
-    @Built
-    public IRequestRulesPaymentService buildRequestRulesPaymentService() {
-        requestRulesPaymentService.InjectRequestRulesPaymentRepository(requestRulesPaymentRepository);
-        return requestRulesPaymentService;
-    }
-
-    @Produces
-    @Built
-    public IRequestRulesShippingMethodService bIRequestRulesShippingMethodService() {
-        requestRulesShippingMethodService
-                .InjectRequestRulesShippingMethodRepository(requestRulesShippingMethodRepository);
-        return requestRulesShippingMethodService;
     }
 
     @Produces

@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import backend.application.dto.RequestFileDto;
 import backend.application.interfaces.out.repository.IRequestFileRepository;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Stateless
 public class RequestFileRepository implements IRequestFileRepository {
     @PersistenceContext
@@ -16,6 +19,19 @@ public class RequestFileRepository implements IRequestFileRepository {
 
     public void createRequestFile(RequestFileDto requestFileDto) {
         RequestFile requestFile = RequestFileMapper.toEntity(requestFileDto);
+
+        Logger.getLogger(RequestFileRepository.class.getName()).log(Level.WARNING, requestFile.toString());
+
+        // Add detailed null checks
+        if (requestFile.getLot() == null) {
+            throw new IllegalArgumentException("Lot cannot be null");
+        }
+        if (requestFile.getSupplier() == null) {
+            throw new IllegalArgumentException("Supplier cannot be null");
+        }
+        if (requestFile.getPath() == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
         entityManager.persist(requestFile);
     }
 

@@ -12,6 +12,10 @@ public interface ISupplierService {
 
     SupplierDto getSupplierById(Long id);
 
+    SupplierDto getSupplierByEmailAndPassword(String email, String password);
+
+    SupplierDto getSupplierByEmail(String email);
+
     List<SupplierDto> getAllSuppliers();
 
     void updateSupplier(SupplierDto supplierDto);

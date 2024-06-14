@@ -1,81 +1,95 @@
 package backend.application.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class RequestRuleDto implements Serializable {
     private Long id;
     private LotDto lot;
     private SupplierDto supplier;
     private String comment;
+    private ShippingMethodDto shippingMethod;
+    private PaymentMethodDto paymentMethod;
+    private Integer paymentValue;
 
     public RequestRuleDto() {
-        
+
     }
 
-    public RequestRuleDto(Long id, LotDto lot, SupplierDto supplier, String comment) {
+    public RequestRuleDto(LotDto lot, SupplierDto supplier, String comment, ShippingMethodDto shippingMethod,
+            PaymentMethodDto paymentMethod, Integer paymentValue) {
+        this.lot = lot;
+        this.supplier = supplier;
+        this.comment = comment;
+        this.shippingMethod = shippingMethod;
+        this.paymentMethod = paymentMethod;
+        this.paymentValue = paymentValue;
+    }
+
+    public RequestRuleDto(Long id, LotDto lot, SupplierDto supplier, String comment, ShippingMethodDto shippingMethod,
+            PaymentMethodDto paymentMethod, Integer paymentValue) {
         this.id = id;
         this.lot = lot;
         this.supplier = supplier;
         this.comment = comment;
+        this.shippingMethod = shippingMethod;
+        this.paymentMethod = paymentMethod;
+        this.paymentValue = paymentValue;
     }
 
     public Long getId() {
         return id;
     }
 
-    public LotDto getLot() {
-        return lot;
-    }
-
-    public SupplierDto getSupplier() {
-        return supplier;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        RequestRuleDto entity = (RequestRuleDto) o;
-        return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.lot, entity.lot) &&
-                Objects.equals(this.supplier, entity.supplier) &&
-                Objects.equals(this.comment, entity.comment);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, lot, supplier, comment);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "lot = " + lot + ", " +
-                "supplier = " + supplier + ", " +
-                "comment = " + comment + ")";
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LotDto getLot() {
+        return lot;
     }
 
     public void setLot(LotDto lot) {
         this.lot = lot;
     }
 
+    public SupplierDto getSupplier() {
+        return supplier;
+    }
+
     public void setSupplier(SupplierDto supplier) {
         this.supplier = supplier;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public ShippingMethodDto getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(ShippingMethodDto shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public PaymentMethodDto getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethodDto paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Integer getPaymentValue() {
+        return paymentValue;
+    }
+
+    public void setPaymentValue(Integer paymentValue) {
+        this.paymentValue = paymentValue;
+    }
+
 }

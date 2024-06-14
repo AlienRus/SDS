@@ -12,6 +12,8 @@ public interface ISupplySpecialistService {
 
     SupplySpecialistDto getSupplySpecialistById(Long id);
 
+    SupplySpecialistDto getSupplySpecialistByEmailAndPassword(String email, String password);
+
     List<SupplySpecialistDto> getAllSupplySpecialists();
 
     void updateSupplySpecialist(SupplySpecialistDto supplySpecialistDto);

@@ -44,4 +44,9 @@ public class StaffService implements IStaffService {
     public void deleteStaff(StaffDto staffDto) {
         staffRepository.deleteStaff(staffDto);
     }
+
+    @Override
+    public StaffDto getStaffByEmailAndPassword(String email, String password) {
+        return staffRepository.getStaffByEmailAndPassword(email, password);
+    }
 }

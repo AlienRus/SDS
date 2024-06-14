@@ -40,4 +40,19 @@ public class SupplySpecialistRepository implements ISupplySpecialistRepository {
         entityManager.remove(
                 entityManager.contains(supplySpecialist) ? supplySpecialist : entityManager.merge(supplySpecialist));
     }
+
+    @Override
+    public SupplySpecialistDto getSupplySpecialistByEmailAndPassword(String email, String password) {
+        List<SupplySpecialist> supplySpecialist = entityManager
+                .createQuery("SELECT ss FROM SupplySpecialist ss WHERE ss.email=:email AND ss.password=:password",
+                        SupplySpecialist.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getResultList();
+        if (supplySpecialist.isEmpty()) {
+            return null;
+        }
+
+        return SupplySpecialistMapper.toDto(supplySpecialist.get(0));
+    }
 }

@@ -1,9 +1,22 @@
 package backend.infrastructure.in.rest.path;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import backend.application.dto.StaffDto;
+import backend.application.dto.SupplierDto;
+import backend.application.dto.SupplySpecialistDto;
+import backend.application.interfaces.in.IStaffService;
+import backend.application.interfaces.in.ISupplierService;
+import backend.application.interfaces.in.ISupplySpecialistService;
+import backend.infrastructure.builder.Built;
 import backend.infrastructure.in.rest.interceptor.TokenRequired;
-import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObjectBuilder;
+import backend.infrastructure.in.rest.request.put.user.UpdateUserRequest;
+import jakarta.inject.Inject;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -23,6 +36,20 @@ public class Users {
     @Context
     private ContainerRequestContext requestContext;
 
+    @Inject
+    @Built
+    private ISupplierService supplierService;
+
+    @Inject
+    @Built
+    private ISupplySpecialistService supplySpecialistService;
+
+    @Inject
+    @Built
+    private IStaffService staffService;
+
+    private Jsonb jsonb = JsonbBuilder.create();
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
@@ -33,52 +60,32 @@ public class Users {
         }
 
         try {
-            JsonArrayBuilder usersArrayBuilder = Json.createArrayBuilder();
+            List<SupplierDto> suppliers = new ArrayList<>();
+            List<SupplySpecialistDto> supplySpecialists = new ArrayList<>();
+            List<StaffDto> staff = new ArrayList<>();
+            Map<String, List> users = new HashMap<>();
 
-            // Пользователь 1
-            JsonObjectBuilder user1Builder = Json.createObjectBuilder()
-                    .add("id", 1)
-                    .add("email", "alienrus@mail.ru")
-                    .add("password", "1351qwaser")
-                    .add("typeOfBusiness", "МСП")
-                    .add("company", "Сибирские буйволы")
-                    .add("firstName", "Василий")
-                    .add("lastName", "Петров")
-                    .add("middleName", "Иванович")
-                    .add("phoneNumber", "8 900 555 3535")
-                    .add("regionOrAddress", "Сибирь")
-                    .add("site", "https://buivol.com")
-                    .add("inn", 123456789012L)
-                    .add("kpp", 123456789L)
-                    .add("groupEtsId", Json.createArrayBuilder().add(1).add(2))
-                    .add("groupEts",
-                            Json.createArrayBuilder().add("Электродвигатели").add("Электротехническая продукция"))
-                    .add("isApproved", true);
+            suppliers.addAll(supplierService.getAllSuppliers());
+            supplySpecialists.addAll(supplySpecialistService.getAllSupplySpecialists());
+            staff.addAll(staffService.getAllStaff());
 
-            // Пользователь 2
-            JsonObjectBuilder user2Builder = Json.createObjectBuilder()
-                    .add("id", 2)
-                    .add("email", "example@mail.ru")
-                    .add("password", "qwaser123")
-                    .add("typeOfBusiness", "МСП")
-                    .add("company", "Леруа")
-                    .add("firstName", "Максим")
-                    .add("lastName", "Дзюба")
-                    .add("middleName", "Иванович")
-                    .add("phoneNumber", "8 923 521 03 13")
-                    .add("regionOrAddress", "г. Кемерово")
-                    .add("site", "")
-                    .add("inn", 123456789987L)
-                    .add("kpp", 123456788L)
-                    .add("groupEtsId", Json.createArrayBuilder().add(1))
-                    .add("groupEts", Json.createArrayBuilder().add("Электродвигатели"))
-                    .add("isApproved", true);
+            for (SupplierDto supplier : suppliers) {
+                supplier.setPassword(null);
+            }
 
-            // Добавление пользователей в массив
-            usersArrayBuilder.add(user1Builder);
-            usersArrayBuilder.add(user2Builder);
+            for (SupplySpecialistDto supplySpecialist : supplySpecialists) {
+                supplySpecialist.setPassword(null);
+            }
 
-            return Response.ok(usersArrayBuilder.build()).build();
+            for (StaffDto staffDto : staff) {
+                staffDto.setPassword(null);
+            }
+
+            users.put("suppliers", suppliers);
+            users.put("supplySpecialists", supplySpecialists);
+            users.put("staff", staff);
+
+            return Response.ok(users).build();
         } catch (JsonbException | IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         } catch (Exception e) {
@@ -91,15 +98,184 @@ public class Users {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @TokenRequired
-    @Path("/{userId}")
-    public Response updateUser(@PathParam("userId") int userId, String userDataJSON) {
-        return Response.status(Response.Status.OK).entity("{\"message\": \"User updated successfully\"}").build();
+    @Path("/{userId}/roles/{roleName}")
+    public Response updateUser(@PathParam("userId") Long userId, @PathParam("roleName") String roleName,
+            String userDataJSON) {
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+
+            UpdateUserRequest updateUserRequest = jsonb.fromJson(userDataJSON, UpdateUserRequest.class);
+
+            if (roleName.equals("supplier")) {
+
+                SupplierDto supplierDto = supplierService.getSupplierById(userId);
+
+                if (updateUserRequest.getCompany() != null) {
+                    supplierDto.setCompany(updateUserRequest.getCompany());
+                }
+
+                if (updateUserRequest.getEmail() != null) {
+                    supplierDto.setEmail(updateUserRequest.getEmail());
+                }
+
+                if (updateUserRequest.getFirstName() != null) {
+                    supplierDto.setFirstName(updateUserRequest.getFirstName());
+                }
+
+                if (updateUserRequest.getInn() != null) {
+                    supplierDto.setInn(updateUserRequest.getInn());
+                }
+
+                if (updateUserRequest.getKpp() != null) {
+                    supplierDto.setKpp(updateUserRequest.getKpp());
+                }
+
+                if (updateUserRequest.getLastName() != null) {
+                    supplierDto.setLastName(updateUserRequest.getLastName());
+                }
+
+                if (updateUserRequest.getMiddleName() != null) {
+                    supplierDto.setMiddleName(updateUserRequest.getMiddleName());
+                }
+
+                if (updateUserRequest.getPassword() != null) {
+                    supplierDto.setPassword(updateUserRequest.getPassword());
+                }
+
+                if (updateUserRequest.getNds() != null) {
+                    supplierDto.setNds(updateUserRequest.getNds());
+                }
+
+                if (updateUserRequest.getPhoneNumber() != null) {
+                    supplierDto.setPhoneNumber(updateUserRequest.getPhoneNumber());
+                }
+
+                if (updateUserRequest.getRegionOrAddress() != null) {
+                    supplierDto.setRegionOrAddress(updateUserRequest.getRegionOrAddress());
+                }
+
+                if (updateUserRequest.getSite() != null) {
+                    supplierDto.setSite(updateUserRequest.getSite());
+                }
+
+                supplierService.updateSupplier(supplierDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("supplySpecialist")) {
+
+                SupplySpecialistDto supplySpecialistDto = supplySpecialistService.getSupplySpecialistById(userId);
+                if (supplySpecialistDto == null) {
+                    return Response.status(404).entity("No such user").build();
+                }
+
+                if (updateUserRequest.getEmail() != null) {
+                    supplySpecialistDto.setEmail(updateUserRequest.getEmail());
+                }
+
+                if (updateUserRequest.getPassword() != null) {
+                    supplySpecialistDto.setPassword(updateUserRequest.getPassword());
+                }
+
+                if (updateUserRequest.getCompany() != null) {
+                    supplySpecialistDto.setCompany(updateUserRequest.getCompany());
+                }
+
+                supplySpecialistService.updateSupplySpecialist(supplySpecialistDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("admin")) {
+                StaffDto staffDto = staffService.getStaffById(userId);
+                if (staffDto == null) {
+                    return Response.status(404).entity("No such user").build();
+                }
+
+                if (updateUserRequest.getEmail() != null) {
+                    staffDto.setEmail(updateUserRequest.getEmail());
+                }
+
+                if (updateUserRequest.getPassword() != null) {
+                    staffDto.setPassword(updateUserRequest.getPassword());
+                }
+
+                staffService.updateStaff(staffDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("securitySpecialist")) {
+                StaffDto staffDto = staffService.getStaffById(userId);
+                if (staffDto == null) {
+                    return Response.status(404).entity("No such user").build();
+                }
+
+                if (updateUserRequest.getEmail() != null) {
+                    staffDto.setEmail(updateUserRequest.getEmail());
+                }
+
+                if (updateUserRequest.getPassword() != null) {
+                    staffDto.setPassword(updateUserRequest.getPassword());
+                }
+
+                staffService.updateStaff(staffDto);
+
+                return Response.ok().build();
+            } else {
+                return Response.status(404).entity("No such role").build();
+            }
+
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 
     @DELETE
     @TokenRequired
-    @Path("/{userId}")
-    public Response deleteUser(@PathParam("userId") int userId) {
-        return Response.status(Response.Status.OK).entity("{\"message\": \"User deleted successfully\"}").build();
+    @Path("/{userId}/roles/{roleName}")
+    public Response deleteUser(@PathParam("userId") Long userId, @PathParam("roleName") String roleName) {
+        String error = requestContext.getProperty("checkToken").toString();
+        if (error.equals("false")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+
+            if (roleName.equals("supplier")) {
+                SupplierDto supplierDto = supplierService.getSupplierById(userId);
+                supplierService.deleteSupplier(supplierDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("supplySpecialist")) {
+                SupplySpecialistDto supplySpecialistDto = supplySpecialistService.getSupplySpecialistById(userId);
+                supplySpecialistService.deleteSupplySpecialist(supplySpecialistDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("admin")) {
+                StaffDto staffDto = staffService.getStaffById(userId);
+                staffService.deleteStaff(staffDto);
+
+                return Response.ok().build();
+
+            } else if (roleName.equals("securitySpecialist")) {
+                StaffDto staffDto = staffService.getStaffById(userId);
+                staffService.deleteStaff(staffDto);
+
+                return Response.ok().build();
+            }
+
+            return Response.status(404).entity("No such user with given role").build();
+        } catch (JsonbException | IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+        }
     }
 }

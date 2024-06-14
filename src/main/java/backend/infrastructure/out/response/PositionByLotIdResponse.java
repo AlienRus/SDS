@@ -1,6 +1,7 @@
 package backend.infrastructure.out.response;
 
 import backend.application.dto.LotPositionDto;
+import backend.application.dto.PositionDto;
 
 public class PositionByLotIdResponse {
     private Long id;
@@ -11,7 +12,7 @@ public class PositionByLotIdResponse {
     private Long winner;
 
     public PositionByLotIdResponse(LotPositionDto lotPositionDto) {
-        this.id = lotPositionDto.getId();
+        this.id = lotPositionDto.getPosition().getId();
         this.itemName = lotPositionDto.getPosition().getItemName();
         this.priceForOne = lotPositionDto.getPosition().getPriceForOne();
         this.count = lotPositionDto.getPosition().getCount();
@@ -20,6 +21,19 @@ public class PositionByLotIdResponse {
             this.winner = null;
         } else {
             this.winner = lotPositionDto.getPosition().getWinner().getId();
+        }
+    }
+
+    public PositionByLotIdResponse(PositionDto positionDto) {
+        this.id = positionDto.getId();
+        this.itemName = positionDto.getItemName();
+        this.priceForOne = positionDto.getPriceForOne();
+        this.count = positionDto.getCount();
+        this.unitName = positionDto.getUnitName();
+        if (positionDto.getWinner() == null) {
+            this.winner = null;
+        } else {
+            this.winner = positionDto.getWinner().getId();
         }
     }
 

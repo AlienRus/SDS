@@ -1,6 +1,8 @@
 package backend.infrastructure.out.response;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import backend.application.dto.LotDto;
 import backend.application.dto.LotFileDto;
@@ -15,9 +17,9 @@ public class LotByIdResponse {
     private LocalDate openDate;
     private RulesResponse rules;
     private String status;
-    private LotFilesResponse lotFiles;
+    private List<LotFilesResponse> lotFiles;
 
-    public LotByIdResponse(LotDto lotDto, LotFileDto lotFileDto) {
+    public LotByIdResponse(LotDto lotDto, List<LotFileDto> lotFileDtos) {
         this.canOwnWay = lotDto.getCanOwnWay();
         this.closeDate = lotDto.getCloseDate();
         this.groupEts = lotDto.getGroupEts().getGroupName();
@@ -27,10 +29,15 @@ public class LotByIdResponse {
         this.openDate = lotDto.getOpenDate();
         this.rules = new RulesResponse(lotDto.getRules());
         this.status = lotDto.getStatus().getStatusName();
-        if (lotFileDto == null) {
+        if (lotFileDtos == null) {
             this.lotFiles = null;
         } else {
-            this.lotFiles = new LotFilesResponse(lotFileDto);
+            List<LotFilesResponse> lotFilesResponses = new ArrayList<LotFilesResponse>();
+
+            for (LotFileDto lotFileDto : lotFileDtos) {
+                lotFilesResponses.add(new LotFilesResponse(lotFileDto));
+            }
+            this.lotFiles = lotFilesResponses;
         }
     }
 
@@ -106,11 +113,11 @@ public class LotByIdResponse {
         this.status = status;
     }
 
-    public LotFilesResponse getLotFiles() {
+    public List<LotFilesResponse> getLotFiles() {
         return lotFiles;
     }
 
-    public void setLotFiles(LotFilesResponse lotFiles) {
+    public void setLotFiles(List<LotFilesResponse> lotFiles) {
         this.lotFiles = lotFiles;
     }
 

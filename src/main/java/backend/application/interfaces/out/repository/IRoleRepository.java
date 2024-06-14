@@ -9,6 +9,8 @@ public interface IRoleRepository {
 
     RoleDto getRoleById(Long id);
 
+    RoleDto getRoleByName(String name);
+
     List<RoleDto> getAllRoles();
 
     void updateRole(RoleDto roleDto);

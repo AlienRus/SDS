@@ -12,6 +12,11 @@ public class LotPositionDto implements Serializable {
 
     }
 
+    public LotPositionDto(LotDto lot, PositionDto position) {
+        this.lot = lot;
+        this.position = position;
+    }
+
     public LotPositionDto(Long id, LotDto lot, PositionDto position) {
         this.id = id;
         this.lot = lot;

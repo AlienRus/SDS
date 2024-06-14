@@ -1,6 +1,7 @@
 package backend.infrastructure.out.repository.db.position;
 
 import backend.application.dto.PositionDto;
+import backend.infrastructure.out.repository.db.lot.LotMapper;
 import backend.infrastructure.out.repository.db.supplier.SupplierMapper;
 
 public class PositionMapper {
@@ -12,7 +13,8 @@ public class PositionMapper {
                 position.getPriceForOne(),
                 position.getCount(),
                 position.getUnitName(),
-                SupplierMapper.toDto(position.getWinner()));
+                SupplierMapper.toDto(position.getWinner()),
+                LotMapper.toDto(position.getLot()));
     }
 
     public static Position toEntity(PositionDto positionDto) {
@@ -22,8 +24,10 @@ public class PositionMapper {
         position.setPriceForOne(positionDto.getPriceForOne());
         position.setCount(positionDto.getCount());
         position.setUnitName(positionDto.getUnitName());
-        
+
         position.setWinner(SupplierMapper.toEntity(positionDto.getWinner()));
+
+        position.setLot(LotMapper.toEntity(positionDto.getLot()));
         return position;
     }
 }

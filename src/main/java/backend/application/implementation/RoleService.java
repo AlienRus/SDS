@@ -39,4 +39,9 @@ public class RoleService implements IRoleService {
     public void deleteRole(RoleDto roleDto) {
         roleRepository.deleteRole(roleDto);
     }
+
+    @Override
+    public RoleDto getRoleByName(String name) {
+        return roleRepository.getRoleByName(name);
+    }
 }

@@ -5,8 +5,6 @@ import backend.infrastructure.out.repository.db.groupET.GroupEtMapper;
 import backend.infrastructure.out.repository.db.lotRule.LotRuleMapper;
 import backend.infrastructure.out.repository.db.status.StatusMapper;
 import backend.infrastructure.out.repository.db.supplySpecialist.SupplySpecialistMapper;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LotMapper {
 
@@ -20,11 +18,11 @@ public class LotMapper {
                 lot.getCanOwnWay(),
                 SupplySpecialistMapper.toDto(lot.getLotCreator()),
                 LotRuleMapper.toDto(lot.getRules()),
-                GroupEtMapper.toDto(lot.getGroupEts()));
+                GroupEtMapper.toDto(lot.getGroupEts()),
+                lot.getPath());
     }
 
     public static Lot toEntity(LotDto lotDto) {
-        Logger.getLogger(LotMapper.class.getName()).log(Level.WARNING, lotDto.toString());
         Lot lot = new Lot();
         lot.setId(lotDto.getId());
         lot.setName(lotDto.getName());
@@ -35,6 +33,7 @@ public class LotMapper {
         lot.setLotCreator(SupplySpecialistMapper.toEntity(lotDto.getLotCreator()));
         lot.setRules(LotRuleMapper.toEntity(lotDto.getRules()));
         lot.setGroupEts(GroupEtMapper.toEntity(lotDto.getGroupEts()));
+        lot.setPath(lotDto.getFilePath());
         return lot;
     }
 }

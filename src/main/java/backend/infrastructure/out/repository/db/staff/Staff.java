@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 public class Staff {
     @Id
     @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 128)

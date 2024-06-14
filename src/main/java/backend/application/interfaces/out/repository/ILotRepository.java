@@ -13,6 +13,8 @@ public interface ILotRepository {
 
     List<LotDto> getAllLotsByGroup(Long groupId);
 
+    Long getLatestLotId();
+
     void updateLot(LotDto lotDto);
 
     void deleteLot(LotDto lotDto);

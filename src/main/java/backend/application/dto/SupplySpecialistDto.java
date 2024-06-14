@@ -15,6 +15,14 @@ public class SupplySpecialistDto implements Serializable {
 
     }
 
+    public SupplySpecialistDto(RoleDto role, String email, String password, String company, Boolean isApproved) {
+        this.role = role;
+        this.email = email;
+        this.password = password;
+        this.company = company;
+        this.isApproved = isApproved;
+    }
+
     public SupplySpecialistDto(Long id, RoleDto role, String email, String password,
             String company, Boolean isApproved) {
         this.id = id;

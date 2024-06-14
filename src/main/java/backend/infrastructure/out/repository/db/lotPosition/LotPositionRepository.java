@@ -4,6 +4,8 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import backend.application.dto.LotPositionDto;
@@ -16,6 +18,8 @@ public class LotPositionRepository implements ILotPositionRepository {
 
     public void createLotPosition(LotPositionDto lotPositionDto) {
         LotPosition lotPosition = LotPositionMapper.toEntity(lotPositionDto);
+
+        Logger.getLogger(LotPositionRepository.class.getName()).log(Level.INFO, lotPosition.toString());
         entityManager.persist(lotPosition);
     }
 
